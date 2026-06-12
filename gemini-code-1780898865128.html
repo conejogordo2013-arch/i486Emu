@@ -992,6 +992,12 @@ class L1Cache {
         this.sets = Array(this.numSets).fill(null).map(() => Array(this.ways).fill(null).map(() => ({ tag: 0, valid: false, dirty: false, lru: 0, data: new Uint8Array(this.lineSize) })));
     }
     setMode(m) { this.mode = m; }
+    flush() {
+        for (const set of this.sets) {
+            for (const way of set) { way.valid = false; way.dirty = false; way.lru = 0; }
+        }
+        this.hits = 0; this.misses = 0;
+    }
     parseAddr(address) { return { offset: address & 0xF, setIdx: (address >> 4) & 0xFF, tag: address >>> 12 }; }
     access(address, isWrite, writeVal = 0, size = 1) {
         // MEJORA: BYPASS EXACTO DE CACHE L1 PARA MEMORIA DE VIDEO (MODO TEXTO Y MODO GRAFICO)
@@ -1006,6 +1012,12 @@ class L1Cache {
         }
 
         const { offset, setIdx, tag } = this.parseAddr(address);
+        if (offset + size > this.lineSize) {
+            if (isWrite) { this.writePhys(address, writeVal, size); return 0; }
+            let readVal = 0;
+            for (let b = 0; b < size; b++) readVal |= this.bus.read8(address + b) << (b * 8);
+            return readVal >>> 0;
+        }
         let set = this.sets[setIdx];
         let hitWayIdx = -1;
         for (let i = 0; i < this.ways; i++) { if (set[i].valid && set[i].tag === tag) { hitWayIdx = i; break; } }
@@ -1087,6 +1099,7 @@ class Corei486 {
     reset(hard = false) {
         if(hard) {
             this.cr.fill(0); this.cr[0] = 0x60000010; 
+            this.cache.flush();
             this.bus.physMem.fill(0);
             this.bus.bios.initIVT(this.bus);
             this.bus.vgaDirty = true;
@@ -1482,8 +1495,9 @@ class Corei486 {
                 let strName = "";
                 if (op===0xA4 || op===0xA5) strName = "MOVS"; else if (op===0xA6 || op===0xA7) strName = "CMPS"; else if (op===0xAA || op===0xAB) strName = "STOS"; else if (op===0xAC || op===0xAD) strName = "LODS"; else if (op===0xAE || op===0xAF) strName = "SCAS";
 
-                if(!rep && !repnz) cx = 1; 
-                if(cx > 0) {
+                const hasRepPrefix = rep || repnz;
+                let iterations = hasRepPrefix ? cx : 1;
+                if(iterations > 0) {
                     let si = a32 ? this.reg32(6) : this.reg16(6); let di = a32 ? this.reg32(7) : this.reg16(7);
                     let inc = this.DF ? -sz : sz; let seg = currentSegOverride!==-1?currentSegOverride:3;
                     
@@ -1510,11 +1524,12 @@ class Corei486 {
                         let v2 = is8?this.rm8(0, di):(o32?this.rm32(0, di):this.rm16(0, di));
                         this.alu(7, v1, v2, !is8&&o32); di=U32(di+inc);
                     }
-                    cx--; this.cycles+=3;
-                    if(a32) { this.set32(6, si); this.set32(7, di); this.set32(1, cx); } else { this.set16(6, si); this.set16(7, di); this.set16(1, cx); }
+                    if(hasRepPrefix) cx--;
+                    this.cycles+=3;
+                    if(a32) { this.set32(6, si); this.set32(7, di); if(hasRepPrefix) this.set32(1, cx); } else { this.set16(6, si); this.set16(7, di); if(hasRepPrefix) this.set16(1, cx); }
                     
                     let breakRep = false;
-                    if(rep || repnz) {
+                    if(hasRepPrefix) {
                         if((strName==="CMPS" || strName==="SCAS")) {
                             if(rep && !this.ZF) breakRep = true; 
                             if(repnz && this.ZF) breakRep = true; 
@@ -1918,7 +1933,7 @@ class Assembler {
 
         if(['MOV', 'ADD', 'SUB', 'CMP', 'AND', 'OR', 'XOR', 'TEST', 'XCHG', 'IMUL'].includes(mnem)) {
             if (mnem==='IMUL' && ops.length===3) return prefixSize + (is32Mode?6:4);
-            if (isReg(ops[0]) && isImm(ops[1])) return prefixSize + (isR8(ops[0]) ? 2 : (is32Mode ? 6 : 4));
+            if (isReg(ops[0]) && isImm(ops[1])) return prefixSize + (isR8(ops[0]) ? 2 : (isR16(ops[0]) ? 3 : 5));
             if (isMemImm(ops[0]) && isReg(ops[1])) return prefixSize + (is32Mode ? 6 : 4);
             if (isReg(ops[0]) && isMemImm(ops[1])) return prefixSize + (is32Mode ? 6 : 4);
             if (isMemDisp(ops[0]) && isReg(ops[1])) return prefixSize + 3;
@@ -1932,6 +1947,7 @@ class Assembler {
         if(['SHL', 'SHR', 'SAL', 'SAR', 'ROL', 'ROR', 'RCL', 'RCR'].includes(mnem)) return prefixSize + 3;
         if(['PUSH', 'POP', 'INC', 'DEC'].includes(mnem)) {
             if(ops[0] && (ops[0].type==='r32'||ops[0].type==='r16')) return prefixSize + 1;
+            if(ops[0] && ops[0].type==='r8') return prefixSize + 2;
             if(ops[0] && ops[0].type==='imm') return prefixSize + (has32Reg ? 5 : 3); 
             return prefixSize + 2;
         }
@@ -2024,7 +2040,13 @@ class Assembler {
                     else if(mnem === 'LGDT' && ops[0].type==='lbl_mem') { emit(0x0F); emit(0x01); emit(0x16); emitAddr(labels[ops[0].val]||0); } else if(mnem === 'LIDT' && ops[0].type==='lbl_mem') { emit(0x0F); emit(0x01); emit(0x1E); emitAddr(labels[ops[0].val]||0); }
                     else if(mnem === 'FLD1') { emit(0xD9); emit(0xE8); } else if(mnem === 'FLDZ') { emit(0xD9); emit(0xEE); } else if(mnem === 'FLDPI') { emit(0xD9); emit(0xEB); } else if(mnem === 'FSIN') { emit(0xD9); emit(0xFE); } else if(mnem === 'FCOS') { emit(0xD9); emit(0xFF); } else if(mnem === 'FSQRT') { emit(0xD9); emit(0xFA); } else if(mnem === 'FADDP') { emit(0xDE); emit(0xC1); } else if(mnem === 'FMULP') { emit(0xDE); emit(0xC9); } else if(mnem === 'FSUBP') { emit(0xDE); emit(0xE9); } else if(mnem === 'FDIVP') { emit(0xDE); emit(0xF9); } else if(mnem === 'FCLEX') { emit(0xDB); emit(0xE2); }
 
-                    else if(mnem === 'INC' && (ops[0].type==='r32'||ops[0].type==='r16')) emit(0x40 + ops[0].val); else if(mnem === 'DEC' && (ops[0].type==='r32'||ops[0].type==='r16')) emit(0x48 + ops[0].val);
+                    else if(mnem === 'INC') {
+                        if(ops[0].type==='r32'||ops[0].type==='r16') emit(0x40 + ops[0].val);
+                        else if(ops[0].type==='r8') { emit(0xFE); emit(0xC0 | ops[0].val); }
+                    } else if(mnem === 'DEC') {
+                        if(ops[0].type==='r32'||ops[0].type==='r16') emit(0x48 + ops[0].val);
+                        else if(ops[0].type==='r8') { emit(0xFE); emit(0xC8 | ops[0].val); }
+                    }
                     else if(mnem === 'PUSH') { if(ops[0].type==='r32'||ops[0].type==='r16') emit(0x50 + ops[0].val); else if(ops[0].type==='imm') { emit(0x68); emitImm(ops[0].val); } }
                     else if(mnem === 'POP' && (ops[0].type==='r32'||ops[0].type==='r16')) emit(0x58 + ops[0].val);
                     else if(mnem === 'INT') { emit(0xCD); emit(ops[0].val); }
@@ -2098,6 +2120,7 @@ class Assembler {
             this.log(`¡Ensamblado Exitoso sin Bugs! Tamaño: ${binary.length} bytes. Base: 0x${hex(startPc)}`);
             emu.reset(true); 
             for(let i=0; i<binary.length; i++) sysBus.physMem[startPc + i] = binary[i];
+            emu.cache.flush();
             emu.eip = startPc; debuggerSys.syncDisasm(codeTokens.filter(t => !['DB','DW','DD'].includes(t.mnem))); ui.update(); 
             logHw(`ROM flasheada exitosamente en 0x${hex(startPc)}. Sistema DX4 estable.`, "sys");
         }
@@ -2295,7 +2318,25 @@ window.onload = function() {
                 case 6: code = `[BITS 16]\n; Demo 6: Salto a Protected Mode\nORG 0x7C00\n  CLI\n  LGDT [gdtr_ptr]\n  MOV EAX, CR0\n  OR EAX, 1\n  MOV CR0, EAX\n  JMP 0x08:pmode\n[BITS 32]\npmode:\n  MOV AX, 0x10\n  MOV DS, AX\n  MOV ES, AX\n  MOV SS, AX\n  MOV FS, AX\n  MOV GS, AX\n  MOV EAX, 0x0BADF00D\n  HLT\ngdtr_ptr:\n  DW 0x17\n  DD gdt_start\ngdt_start:\n  DD 0, 0\n  DD 0x0000FFFF, 0x00CF9A00\n  DD 0x0000FFFF, 0x00CF9200`; break;
                 case 7: code = `[BITS 16]\n; Demo 7: VGA Texto Scroll Dinámico HW\nORG 0x7C00\n  MOV AH, 0x0E\n  MOV AL, 0x48\n  INT 0x10\n  MOV AL, 0x4F\n  INT 0x10\n  MOV AL, 0x4C\n  INT 0x10\n  MOV AL, 0x41\n  INT 0x10\n  MOV AL, 0x0D\n  INT 0x10\n  MOV AL, 0x0A\n  INT 0x10\n  HLT`; break;
                 case 8: code = `[BITS 16]\n; Demo 8: BIOS INT & BCD Math\nORG 0x7C00\n  INT 0x11\n  MOV BX, AX\n  INT 0x12\n  MOV CX, AX\n  MOV AL, 0x19\n  ADD AL, 0x05\n  DAA\n  CLC\n  HLT`; break;
-                case 9: code = `[BITS 16]\n; Demo 9: Teclado interactivo y bucle (Modo Texto PURO)\nORG 0x7C00\nloop:\n  MOV AH, 0x00\n  INT 0x16\n  MOV AH, 0x0E\n  INT 0x10\n  JMP loop\n  HLT`; break;
+                case 9: code = `[BITS 16]
+; Demo 9: Teclado interactivo y bucle (Modo Texto PURO)
+ORG 0x7C00
+  MOV AH, 0x0E
+  MOV AL, 0x4B ; K
+  INT 0x10
+  MOV AL, 0x42 ; B
+  INT 0x10
+  MOV AL, 0x44 ; D
+  INT 0x10
+  MOV AL, 0x3E ; >
+  INT 0x10
+loop:
+  MOV AH, 0x00
+  INT 0x16
+  MOV AH, 0x0E
+  INT 0x10
+  JMP loop
+  HLT`; break;
                 case 10: code = `[BITS 16]\n; Demo 10: Master PIC IRQ0 Cascada\nORG 0x7C00\n  CLI\n  MOV AX, 0x0000\n  MOV DS, AX\n  MOV [0x0020], isr_timer\n  MOV [0x0022], AX\n  MOV AL, 0xFE\n  OUT 0x21, AL\n  STI\nmain_loop:\n  HLT\n  JMP main_loop\nisr_timer:\n  MOV AH, 0x0E\n  MOV AL, 0x2E\n  INT 0x10\n  MOV AL, 0x20\n  OUT 0x20, AL\n  IRET\n`; break;
                 case 11: code = `[BITS 16]\n; Demo 11: VGA Mode 13h (Graphics 320x200)\nORG 0x7C00\n  MOV AH, 0x00\n  MOV AL, 0x13\n  INT 0x10\n  MOV AX, 0xA000\n  MOV ES, AX\n  MOV DI, 0\n  MOV CX, 64000\n  MOV AL, 0x00\ndraw_loop:\n  STOSB\n  INC AL\n  LOOP draw_loop\n  HLT\n`; break;
                 case 12: code = `[BITS 16]\n; Demo 12: Advanced KBD Make/Break Codes\nORG 0x7C00\n  MOV AH, 0x00\n  MOV AL, 0x13\n  INT 0x10\nread_loop:\n  IN AL, 0x64\n  TEST AL, 1\n  JZ read_loop\n  IN AL, 0x60\n  MOV ES, [vid_seg]\n  MOV DI, [cursor]\n  MOV [ES:DI], AL\n  INC WORD [cursor]\n  JMP read_loop\nvid_seg: DW 0xA000\ncursor:  DW 0x0000\n`; break;

@@ -194,6 +194,12 @@
             <input type="checkbox" id="chkBIOS" checked onchange="sysBus.togglePeripheral('BIOS', this.checked)" class="accent-green-500">
             <span class="text-white font-semibold">BIOS ROM (0xF0000)</span>
         </label>
+        <div class="flex items-center gap-1.5 bg-slate-950/70 border border-slate-800 rounded px-2 py-1">
+            <span class="text-[9px] text-amber-300 font-bold">Fuente BIOS:</span>
+            <span id="biosSourceLbl" class="text-[9px] text-green-400 font-bold">Integrada</span>
+            <input type="file" id="biosFile" class="text-[8px] p-0.5 bg-slate-800 text-cyan-300 border-slate-600 rounded max-w-[160px]" accept=".rom,.bin,.fd,.bios" onchange="sysBus.bios.loadImage(event, sysBus)">
+            <button class="btn bg-slate-700 hover:bg-slate-600 py-0.5 text-[8px]" onclick="sysBus.bios.useBuiltIn(sysBus)">BIOS integrada</button>
+        </div>
         <label class="flex items-center gap-1.5 cursor-pointer select-none">
             <input type="checkbox" id="chkVGA" checked onchange="sysBus.togglePeripheral('VGA', this.checked)" class="accent-green-500">
             <span class="text-white font-semibold">VGA CRT / GPU</span>
@@ -503,6 +509,7 @@ const cp437 = [
     'α','ß','Γ','π','Σ','σ','µ','τ','Φ','Θ','Ω','δ','∞','φ','ε','∩',
     '≡','±','≥','≤','⌠','⌡','÷','≈','°','∙','·','√','ⁿ','²','■',' '
 ];
+const vgaColorsText = ['#000', '#00A', '#0A0', '#0AA', '#A00', '#A0A', '#A50', '#AAA', '#555', '#55F', '#5F5', '#5FF', '#F55', '#F5F', '#FF5', '#FFF'];
 
 var emu = null; var sysBus = null; var assembler = null; var debuggerSys = null;
 
@@ -552,6 +559,39 @@ class SystemBus {
         this.vgaCursorLocation = 0; 
     }
 
+    initializeTextVRAM(clearChars = true) {
+        for (let i = 0; i < 4000; i += 2) {
+            if (clearChars) this.view.setUint8(0xB8000 + i, 0x20);
+            this.view.setUint8(0xB8000 + i + 1, 0x07);
+        }
+        this.vgaDirty = true;
+    }
+
+    setVGAMode(mode) {
+        this.vgaMode = mode;
+        const screen = document.getElementById('vgaScreen');
+        const canvas = document.getElementById('vgaCanvas');
+        const label = document.getElementById('vgaModeLbl');
+        if (mode === 0x13) {
+            if (screen) screen.classList.add('hidden-vga');
+            if (canvas) canvas.classList.remove('hidden-vga');
+            if (label) label.innerText = "(Mode 13h - Gráficos 320x200)";
+            for (let i = 0; i < 64000; i++) this.view.setUint8(0xA0000 + i, 0);
+        } else {
+            this.vgaMode = 0x03;
+            if (screen) screen.classList.remove('hidden-vga');
+            if (canvas) canvas.classList.add('hidden-vga');
+            if (label) label.innerText = "(Mode 03h - Texto)";
+            this.initializeTextVRAM(true);
+        }
+        this.vgaCursorLocation = 0;
+        this.vgaDirty = true;
+    }
+
+    isHighBiosAlias(address) {
+        return address >= 0xFFFF0000 && address <= 0xFFFFFFFF;
+    }
+
     togglePeripheral(name, enabled) {
         if(name === 'BIOS') { this.bios.enabled = enabled; }
         if(name === 'VGA') {
@@ -572,37 +612,37 @@ class SystemBus {
     }
 
     read8(address) { 
-        if(address >= 0xF0000 && address <= 0xFFFFF && this.bios.enabled) return this.bios.read8(address);
+        if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) return this.bios.read8(address);
         if(address < 0 || address >= this.memSize) return 0xFF; 
         return this.view.getUint8(address); 
     }
     read16(address) { 
-        if(address >= 0xF0000 && address <= 0xFFFFF && this.bios.enabled) return this.bios.read8(address) | (this.bios.read8(address+1) << 8);
+        if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) return this.bios.read8(address) | (this.bios.read8(address+1) << 8);
         if(address < 0 || address >= this.memSize - 1) return 0xFFFF;
         return this.view.getUint16(address, true); 
     }
     read32(address) { 
-        if(address >= 0xF0000 && address <= 0xFFFFF && this.bios.enabled) return this.bios.read8(address) | (this.bios.read8(address+1) << 8) | (this.bios.read8(address+2) << 16) | (this.bios.read8(address+3) << 24);
+        if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) return this.bios.read8(address) | (this.bios.read8(address+1) << 8) | (this.bios.read8(address+2) << 16) | (this.bios.read8(address+3) << 24);
         if(address < 0 || address >= this.memSize - 3) return 0xFFFFFFFF;
         return this.view.getUint32(address, true); 
     }
 
     write8(address, v) { 
-        if(address >= 0xF0000 && address <= 0xFFFFF && this.bios.enabled) { this.bios.write8(address, v); return; }
+        if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) { this.bios.write8(address, v); return; }
         if(address < 0 || address >= this.memSize) return;
         this.view.setUint8(address, v); 
         if(address >= 0xB8000 && address < 0xB8FA0 && this.vgaEnabled && this.vgaMode === 0x03) this.vgaDirty = true; 
         if(address >= 0xA0000 && address < 0xB0000 && this.vgaEnabled && this.vgaMode === 0x13) this.vgaDirty = true;
     }
     write16(address, v) { 
-        if(address >= 0xF0000 && address <= 0xFFFFF && this.bios.enabled) { this.bios.write8(address, v & 0xFF); this.bios.write8(address+1, (v>>8) & 0xFF); return; }
+        if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) { this.bios.write8(address, v & 0xFF); this.bios.write8(address+1, (v>>8) & 0xFF); return; }
         if(address < 0 || address >= this.memSize - 1) return;
         this.view.setUint16(address, v, true); 
         if(address >= 0xB8000 && address < 0xB8FA0 && this.vgaEnabled && this.vgaMode === 0x03) this.vgaDirty = true; 
         if(address >= 0xA0000 && address < 0xB0000 && this.vgaEnabled && this.vgaMode === 0x13) this.vgaDirty = true;
     }
     write32(address, v) { 
-        if(address >= 0xF0000 && address <= 0xFFFFF && this.bios.enabled) { this.bios.write8(address, v & 0xFF); this.bios.write8(address+1, (v>>8) & 0xFF); this.bios.write8(address+2, (v>>16) & 0xFF); this.bios.write8(address+3, (v>>24) & 0xFF); return; }
+        if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) { this.bios.write8(address, v & 0xFF); this.bios.write8(address+1, (v>>8) & 0xFF); this.bios.write8(address+2, (v>>16) & 0xFF); this.bios.write8(address+3, (v>>24) & 0xFF); return; }
         if(address < 0 || address >= this.memSize - 3) return;
         this.view.setUint32(address, v, true); 
         if(address >= 0xB8000 && address < 0xB8FA0 && this.vgaEnabled && this.vgaMode === 0x03) this.vgaDirty = true; 
@@ -817,13 +857,58 @@ class BIOSROM {
     constructor() {
         this.enabled = true; this.baseAddress = 0xF0000; this.size = 64 * 1024;
         this.data = new Uint8Array(this.size);
-        this.data[0xFFF0 - 0] = 0xEA; this.data[0xFFF1 - 0] = 0x00; this.data[0xFFF2 - 0] = 0x7C; this.data[0xFFF3 - 0] = 0x00; this.data[0xFFF4 - 0] = 0x00;
-        this.data[0x01FE] = 0x55; this.data[0x01FF] = 0xAA; 
+        this.sourceName = "Integrada";
+        this.buildBuiltInImage();
+        this.builtInData = new Uint8Array(this.data);
         
         // Mouse State para INT 33h
         this.mouseX = 0; this.mouseY = 0; this.mouseBtn = 0; 
         this.mouseVisible = false;
         this.mouseInitialized = false; // REGLA DE ORO: Mouse no detectado hasta usar INT 33h
+    }
+
+    buildBuiltInImage() {
+        this.data.fill(0xFF);
+        // Vector de reset F000:FFF0 -> 0000:7C00 para mantener el flujo de demos/boot existente.
+        this.data[0xFFF0] = 0xEA; this.data[0xFFF1] = 0x00; this.data[0xFFF2] = 0x7C; this.data[0xFFF3] = 0x00; this.data[0xFFF4] = 0x00;
+        this.data[0x01FE] = 0x55; this.data[0x01FF] = 0xAA;
+        this.data[0x100] = 0xCF;
+    }
+
+    updateSourceLabel() {
+        const label = document.getElementById('biosSourceLbl');
+        if (label) label.innerText = this.sourceName;
+    }
+
+    setImage(bytes, name = "ROM externa") {
+        this.data.fill(0xFF);
+        const start = Math.max(0, bytes.length - this.size);
+        const slice = bytes.slice(start, bytes.length);
+        this.data.set(slice, this.size - slice.length);
+        this.sourceName = name;
+        this.updateSourceLabel();
+        logHw(`[BIOS] ROM activa: ${name} (${bytes.length} bytes, mapeados ${slice.length} bytes en F0000-FFFFF).`, 'warn');
+    }
+
+    loadImage(event, sysBusRef) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            this.setImage(new Uint8Array(e.target.result), file.name);
+            if (sysBusRef) sysBusRef.vgaDirty = true;
+            if (emu) emu.reset(true);
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    useBuiltIn(sysBusRef) {
+        this.data.set(this.builtInData);
+        this.sourceName = "Integrada";
+        this.updateSourceLabel();
+        logHw("[BIOS] Restaurada la ROM integrada del emulador.", 'warn');
+        if (sysBusRef) sysBusRef.vgaDirty = true;
+        if (emu) emu.reset(true);
     }
     
     initIVT(sysBus) {
@@ -834,7 +919,11 @@ class BIOSROM {
             sysBus.write16(i*4 + 2, dummyIretAddr >>> 4);
         }
     }
-    read8(address) { return !this.enabled ? 0xFF : this.data[(address - this.baseAddress) & 0xFFFF]; }
+    read8(address) {
+        if(!this.enabled) return 0xFF;
+        const offset = address >= 0xFFFF0000 ? (address - 0xFFFF0000) : (address - this.baseAddress);
+        return this.data[offset & 0xFFFF];
+    }
     write8(address, value) { }
 }
 
@@ -1004,19 +1093,9 @@ class Corei486 {
             this.bus.vgaCursorLocation = 0;
             this.bus.bios.mouseInitialized = false; // Mouse inactivo por defecto
 
-            if (this.bus.vgaMode !== 0x03) {
-                this.bus.vgaMode = 0x03;
-                document.getElementById('vgaScreen').classList.remove('hidden-vga');
-                document.getElementById('vgaCanvas').classList.add('hidden-vga');
-                document.getElementById('vgaModeLbl').innerText = "(Mode 03h - Texto)";
-                // [NUEVO] ESPEJO EXACTO DE LA BIOS EN EL LÍMITE SUPERIOR DE LOS 4GB (i486 Reset)
-            const highResetBase = 0xFFFF0000;
-            if (this.bus.bios.data && this.bus.bios.data.length) {
-                for (let i = 0; i < this.bus.bios.data.length; i++) {
-                    this.bus.physMem[highResetBase + i] = this.bus.bios.data[i];
-                }
-            }
-            }
+            this.bus.setVGAMode(0x03);
+            // El espejo de reset alto del i486 (FFFF0000h-FFFFFFFFh) se atiende en SystemBus.read*.
+            // No se escribe fuera de la RAM física disponible, evitando pantallas mudas por accesos inválidos.
         }
         this.dr.fill(0); this.eflags = 0x00000002; this.eip = 0x00007C00;
         
@@ -1669,19 +1748,9 @@ class Corei486 {
             if(vec === 0x10) { 
                 let service = this.reg8(4); 
                 if(service === 0x00) { 
-                    let mode = this.reg8(0); this.bus.vgaMode = mode;
-                    if(mode === 0x13) {
-                        document.getElementById('vgaScreen').classList.add('hidden-vga');
-                        document.getElementById('vgaCanvas').classList.remove('hidden-vga');
-                        document.getElementById('vgaModeLbl').innerText = "(Mode 13h - Gráficos 320x200)";
-                        for(let i=0; i<64000; i++) this.bus.write8(0xA0000+i, 0);
-                    } else {
-                        document.getElementById('vgaScreen').classList.remove('hidden-vga');
-                        document.getElementById('vgaCanvas').classList.add('hidden-vga');
-                        document.getElementById('vgaModeLbl').innerText = "(Mode 03h - Texto)";
-                        for(let i=0; i<4000; i+=2) { this.bus.write8(0xB8000+i, 0); this.bus.write8(0xB8000+i+1, 0x07); }
-                    }
-                    this.bus.vgaCursorLocation = 0; this.bus.vgaDirty = true; return;
+                    let mode = this.reg8(0);
+                    this.bus.setVGAMode(mode === 0x13 ? 0x13 : 0x03);
+                    return;
                 }
                 if(service === 0x0E) { 
                     let charCode = this.reg8(0); let cursorLoc = this.bus.vgaCursorLocation;
@@ -2066,7 +2135,7 @@ window.onload = function() {
     for(let i=0; i<80*25; i++) {
         let s = document.createElement('span'); s.className = 'vga-char'; s.id = `vga_c_${i}`; vgaContainer.appendChild(s);
     }
-    const vgaColorsText = ['#000', '#00A', '#0A0', '#0AA', '#A00', '#A0A', '#A50', '#AAA', '#555', '#55F', '#5F5', '#5FF', '#F55', '#F5F', '#FF5', '#FFF'];
+    sysBus.setVGAMode(0x03);
 
     window.ui = {
         runInt: null,

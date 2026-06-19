@@ -131,10 +131,10 @@
         .mem-addr { color: #64748b; font-weight: bold; width: 60px; }
 
         /* VGA Container */
-        .vga-container { background: #000; border: 2px solid #334155; border-radius: 4px; padding: 2px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; cursor: crosshair; width: 100%; min-height: 0; flex: 1; }
-        #vgaScreen { display: grid; grid-template-columns: repeat(80, minmax(0, 1fr)); grid-template-rows: repeat(25, minmax(0, 1fr)); width: min(100%, calc(100vh * 4 / 3)); max-width: 100%; max-height: 100%; aspect-ratio: 4/3; background: #000; position: relative; user-select: none; }
-        #vgaCanvas { width: min(100%, calc(100vh * 4 / 3)); max-width: 100%; max-height: 100%; aspect-ratio: 4/3; image-rendering: pixelated; background: #000; position: absolute; inset: 0; margin: auto; user-select: none; object-fit: contain; display: block; }
-        #mainVGAContainer.mode-13h #vgaCanvas { aspect-ratio: 16 / 10; width: min(100%, calc(100vh * 16 / 10)); }
+        .vga-container { background: #000; border: 2px solid #334155; border-radius: 4px; padding: 2px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; cursor: crosshair; width: 100%; min-height: 260px; flex: 1; }
+        #vgaScreen { display: grid; grid-template-columns: repeat(80, minmax(0, 1fr)); grid-template-rows: repeat(25, minmax(0, 1fr)); width: 100%; height: 100%; max-width: 100%; max-height: 100%; aspect-ratio: 4/3; background: #000; position: relative; user-select: none; }
+        #vgaCanvas { width: 100%; height: 100%; max-width: 100%; max-height: 100%; aspect-ratio: 4/3; image-rendering: pixelated; background: #000; position: absolute; inset: 0; margin: auto; user-select: none; object-fit: contain; display: block; }
+        #mainVGAContainer.mode-13h #vgaCanvas { aspect-ratio: 16 / 10; width: 100%; height: 100%; object-fit: contain; }
         #mainVGAContainer.mode-03h #vgaScreen { aspect-ratio: 4 / 3; }
         .vga-char { display: flex; justify-content: center; align-items: center; font-family: 'Courier New', monospace; font-size: clamp(8px, 0.95vw, 14px); font-weight: bold; line-height: 1; white-space: pre; min-width: 0; min-height: 0; }
         .vga-cursor { border-bottom: 2px solid #fff; animation: cursorBlink 0.5s steps(2, start) infinite; }
@@ -187,6 +187,7 @@
             <button id="btnRun" class="btn btn-green shadow-[0_0_5px_rgba(16,185,129,0.5)]" onclick="emu.run()">Run (F5)</button>
             <button id="btnStop" class="btn btn-red" onclick="emu.stop()" disabled>Pause</button>
             <button class="btn bg-orange-600" onclick="emu.reset(true)">RST HW</button>
+            <button class="btn bg-cyan-700" onclick="emu.bootFromBIOS()">Boot BIOS</button>
         </div>
     </div>
 
@@ -317,7 +318,7 @@
                 </div>
             </div>
 
-            <div id="vgaHardwarePanel" class="panel h-auto peripheral-active border-2">
+            <div id="vgaHardwarePanel" class="panel min-h-[310px] peripheral-active border-2">
                 <div class="header">
                     <span>Monitor VGA <span id="vgaModeLbl" class="text-amber-400">(Mode 03h - Texto)</span></span>
                     <span class="text-green-500 font-bold text-[9px]" id="lblVGAStat">ONLINE</span>
@@ -615,7 +616,7 @@ class SystemBus {
         if(name === 'BIOS') { this.bios.enabled = enabled; }
         if(name === 'VGA') {
             this.vgaEnabled = enabled;
-            document.getElementById('vgaHardwarePanel').className = enabled ? "panel h-auto peripheral-active border-2" : "panel h-auto peripheral-inactive border-2";
+            document.getElementById('vgaHardwarePanel').className = enabled ? "panel min-h-[310px] peripheral-active border-2" : "panel min-h-[310px] peripheral-inactive border-2";
             document.getElementById('lblVGAStat').innerText = enabled ? "ONLINE" : "OFFLINE";
             document.getElementById('lblVGAStat').className = enabled ? "text-green-500 font-bold text-[9px]" : "text-red-500 font-bold text-[9px]";
         }
@@ -1261,6 +1262,28 @@ class Corei486 {
 
         logHw("[BIOS] Sector de Boot cargado en 0000:7C00. Transfiriendo control a OS...", "warn");
         if(typeof ui !== 'undefined') ui.update();
+    }
+
+    bootFromBIOS() {
+        const tryFloppy = () => {
+            if(!this.bus.floppy.hasDisk) return false;
+            this.bootFloppy();
+            return true;
+        };
+        const tryHDD = () => {
+            const drive = this.bus.hdd.drives[this.bus.hdd.activeDrive];
+            if(!drive || !drive.data || drive.data.length < 512) return false;
+            this.reset(true);
+            for(let i=0; i<512; i++) this.bus.write8(0x7C00 + i, drive.data[i] || 0);
+            this.eip = 0x7C00;
+            this.loadSegReg(1, 0x0000); this.loadSegReg(3, 0x0000); this.loadSegReg(0, 0x0000); this.loadSegReg(2, 0x0000);
+            this.set16(4, 0x7C00); this.set8(2, 0x80);
+            logHw(`[BIOS] Sector de Boot HDD cargado desde ${drive.name} en 0000:7C00.`, 'warn');
+            if(typeof ui !== 'undefined') ui.update();
+            return true;
+        };
+        const booted = this.bus.bootOrder === 'hdd' ? (tryHDD() || tryFloppy()) : (tryFloppy() || tryHDD());
+        if(!booted) logHw('[BIOS] No hay medios arrancables según el orden seleccionado.', 'err');
     }
 
     reg32(idx) { return this.gpr.getUint32((idx&7)*4, true); } set32(idx, v) { this.gpr.setUint32((idx&7)*4, v, true); }
@@ -1942,13 +1965,47 @@ class Corei486 {
                 }
                 else if(service === 0x02) { this.bus.vgaCursorLocation = (this.reg8(6) * 80) + this.reg8(2); this.bus.vgaDirty = true; }
                 else if(service === 0x03) { let loc = this.bus.vgaCursorLocation; this.set8(6, Math.floor(loc / 80)); this.set8(2, loc % 80); this.set16(1, 0x0607); }
+                else if(service === 0x06 || service === 0x07) {
+                    // Scroll up/down window; enough for BIOS text installers and DOS UIs.
+                    const lines = this.reg8(0) || 25; const attr = this.reg8(3) || 0x07;
+                    for(let row=0; row<25; row++) for(let col=0; col<80; col++) {
+                        const dst = 0xB8000 + ((row*80+col)*2);
+                        const srcRow = service === 0x06 ? row + lines : row - lines;
+                        if(srcRow >= 0 && srcRow < 25) { const src = 0xB8000 + ((srcRow*80+col)*2); this.bus.write16(dst, this.bus.read16(src)); }
+                        else { this.bus.write8(dst, 0x20); this.bus.write8(dst+1, attr); }
+                    }
+                    this.bus.vgaDirty = true;
+                }
                 else if(service === 0x0F) { this.set8(0, this.bus.vgaMode); this.set8(4, this.bus.vgaMode === 0x13 ? 40 : 80); this.set8(7, 0); }
                 return;
             }
 
-            // INT 13h: Disk Services LBA/CHS Exacto
-            if(vec === 0x13 && this.bus.floppy.enabled) {
-                let service = this.reg8(4);
+            // INT 13h: Disk Services BIOS (Floppy + HDD, CHS y Extensions parciales)
+            if(vec === 0x13) {
+                let service = this.reg8(4); let driveNo = this.reg8(2);
+                const isHDD = driveNo >= 0x80;
+                if(service === 0x41 && isHDD) { this.set16(3, 0xAA55); this.set16(0, 0x3000); this.set16(1, 0x0007); this.CF = false; return; }
+                if(service === 0x42 && isHDD) {
+                    const dap = (this.segs[3] << 4) + this.reg16(6);
+                    const count = this.bus.read16(dap + 2);
+                    const dstOff = this.bus.read16(dap + 4); const dstSeg = this.bus.read16(dap + 6);
+                    const lba = this.bus.read32(dap + 8);
+                    const drive = this.bus.hdd.drives[this.bus.hdd.activeDrive];
+                    if(!drive) { this.set8(4, 0x01); this.CF = true; return; }
+                    for(let i=0; i<count*512; i++) this.bus.write8(((dstSeg << 4) + dstOff + i) & 0xFFFFF, drive.data[lba*512 + i] || 0);
+                    this.set8(4, 0); this.CF = false; return;
+                }
+                if(isHDD && (service === 0x02 || service === 0x04 || service === 0x08)) {
+                    const drive = this.bus.hdd.drives[this.bus.hdd.activeDrive];
+                    if(service === 0x08) { this.set8(4, 0); this.set8(3, 16); this.set8(1, 63); this.set8(5, 1023 & 0xFF); this.set8(6, 15); this.CF=false; return; }
+                    if(!drive) { this.set8(4, 0x01); this.CF = true; return; }
+                    let al = this.reg8(0); let ch = this.reg8(5); let cl = this.reg8(1); let dh = this.reg8(6); let bx = this.reg16(3);
+                    let cylinder = ch | ((cl & 0xC0) << 2); let sector = cl & 0x3F; let head = dh;
+                    let lba = (cylinder * 16 + head) * 63 + (sector - 1);
+                    if(service === 0x02) for(let i=0; i<al*512; i++) this.wm8(0, bx + i, drive.data[lba*512 + i] || 0);
+                    this.set8(4, 0); this.set8(0, al); this.CF = false; return;
+                }
+                if(!this.bus.floppy.enabled && !isHDD) { this.set8(4, 0x01); this.CF = true; return; }
                 if(service === 0x00 || service === 0x01) { this.set8(4, 0); this.CF = false; return; }
                 if(service === 0x02 || service === 0x04) {
                     if(!this.bus.floppy.hasDisk) { this.set8(4, 0x01); this.CF = true; return; }

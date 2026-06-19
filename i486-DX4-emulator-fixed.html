@@ -6,87 +6,87 @@
     <title>Intel i486 DX4-100 Extreme Workstation - 100% Complete Simulation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { 
-            --bg: #030712; 
-            --panel: #0b0f19; 
-            --border: #1e293b; 
-            --text: #94a3b8; 
-            --hl: #06b6d4; 
-            --accent: #a855f7; 
+        :root {
+            --bg: #030712;
+            --panel: #0b0f19;
+            --border: #1e293b;
+            --text: #94a3b8;
+            --hl: #06b6d4;
+            --accent: #a855f7;
             --neon-green: #22c55e;
             --amber: #f59e0b;
         }
-        body { 
-            background-color: var(--bg); 
-            color: var(--text); 
-            font-family: 'Consolas', 'Courier New', monospace; 
-            font-size: 11px; 
-            overflow: hidden; 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100vh; 
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 11px;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
-        .panel { 
-            background-color: var(--panel); 
-            border: 1px solid var(--border); 
-            border-radius: 0.375rem; 
-            padding: 0.5rem; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden; 
-            position: relative; 
+        .panel {
+            background-color: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
         }
-        .header { 
-            border-bottom: 1px solid var(--border); 
-            padding-bottom: 0.35rem; 
-            margin-bottom: 0.35rem; 
-            font-weight: bold; 
-            color: var(--hl); 
-            text-transform: uppercase; 
-            letter-spacing: 0.05em; 
-            font-size: 10px; 
-            display: flex; 
-            justify-content: space-between; 
+        .header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.35rem;
+            margin-bottom: 0.35rem;
+            font-weight: bold;
+            color: var(--hl);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 10px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
-        
+
         .grid-regs { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.5rem; }
         .reg-name { color: #f472b6; font-weight: 600; }
         .reg-val { color: var(--neon-green); font-variant-numeric: tabular-nums; }
         .flag-on { color: #10b981; font-weight: bold; text-shadow: 0 0 4px rgba(16, 185, 129, 0.6); }
         .flag-off { color: #334155; }
         .sys-mode { padding: 0.1rem 0.4rem; border-radius: 0.25rem; font-weight: bold; font-size: 9px; border: 1px solid transparent; transition: all 0.3s ease; }
-        
-        input, textarea, select { 
-            background-color: #020617; 
-            border: 1px solid var(--border); 
-            color: var(--neon-green); 
-            outline: none; 
-            padding: 0.25rem; 
-            font-family: inherit; 
-            font-size: inherit; 
+
+        input, textarea, select {
+            background-color: #020617;
+            border: 1px solid var(--border);
+            color: var(--neon-green);
+            outline: none;
+            padding: 0.25rem;
+            font-family: inherit;
+            font-size: inherit;
             border-radius: 0.25rem;
         }
         input:focus, textarea:focus { border-color: var(--hl); box-shadow: 0 0 0 1px var(--hl); }
-        
-        .btn { 
-            background-color: #0284c7; 
-            color: white; 
-            padding: 0.25rem 0.6rem; 
-            border-radius: 0.25rem; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-            border: none; 
-            font-weight: 600; 
-            text-transform: uppercase; 
-            font-size: 10px; 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 4px; 
+
+        .btn {
+            background-color: #0284c7;
+            color: white;
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
         }
         .btn:hover { background-color: #0369a1; filter: brightness(1.15); }
         .btn:disabled { background-color: #1e293b; cursor: not-allowed; color: #475569; }
@@ -98,7 +98,7 @@
         ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
-        
+
         .log-line { border-bottom: 1px solid #111827; padding: 2px 0; font-size: 10px; word-break: break-all; }
         .log-err { color: #f87171; font-weight: bold; background: rgba(239, 68, 68, 0.08); border-left: 3px solid #ef4444; padding-left: 4px;}
         .log-warn { color: #fbbf24; border-left: 3px solid #fbbf24; padding-left: 4px;}
@@ -129,11 +129,13 @@
         .ascii-cell { color: #cbd5e1; }
         .mem-row { display: flex; gap: 8px; }
         .mem-addr { color: #64748b; font-weight: bold; width: 60px; }
-        
+
         /* VGA Container */
-        .vga-container { background: #000; border: 2px solid #334155; border-radius: 4px; padding: 2px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; cursor: crosshair; width: 100%; min-height: 0; flex: 1; }
-        #vgaScreen { display: grid; grid-template-columns: repeat(80, minmax(0, 1fr)); grid-template-rows: repeat(25, minmax(0, 1fr)); width: min(100%, calc(100vh * 4 / 3)); max-width: 100%; max-height: 100%; aspect-ratio: 4/3; background: #000; position: relative; user-select: none; }
-        #vgaCanvas { width: min(100%, calc(100vh * 4 / 3)); max-width: 100%; max-height: 100%; aspect-ratio: 4/3; image-rendering: pixelated; background: #000; position: absolute; inset: 0; margin: auto; user-select: none; object-fit: contain; display: block; }
+        .vga-container { background: #000; border: 2px solid #334155; border-radius: 4px; padding: 2px; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; cursor: crosshair; width: 100%; min-height: 260px; flex: 1; }
+        #vgaScreen { display: grid; grid-template-columns: repeat(80, minmax(0, 1fr)); grid-template-rows: repeat(25, minmax(0, 1fr)); width: 100%; height: 100%; max-width: 100%; max-height: 100%; aspect-ratio: 4/3; background: #000; position: relative; user-select: none; }
+        #vgaCanvas { width: 100%; height: 100%; max-width: 100%; max-height: 100%; aspect-ratio: 4/3; image-rendering: pixelated; background: #000; position: absolute; inset: 0; margin: auto; user-select: none; object-fit: contain; display: block; }
+        #mainVGAContainer.mode-13h #vgaCanvas { aspect-ratio: 16 / 10; width: 100%; height: 100%; object-fit: contain; }
+        #mainVGAContainer.mode-03h #vgaScreen { aspect-ratio: 4 / 3; }
         .vga-char { display: flex; justify-content: center; align-items: center; font-family: 'Courier New', monospace; font-size: clamp(8px, 0.95vw, 14px); font-weight: bold; line-height: 1; white-space: pre; min-width: 0; min-height: 0; }
         .vga-cursor { border-bottom: 2px solid #fff; animation: cursorBlink 0.5s steps(2, start) infinite; }
         @keyframes cursorBlink { to { border-color: transparent; } }
@@ -185,11 +187,17 @@
             <button id="btnRun" class="btn btn-green shadow-[0_0_5px_rgba(16,185,129,0.5)]" onclick="emu.run()">Run (F5)</button>
             <button id="btnStop" class="btn btn-red" onclick="emu.stop()" disabled>Pause</button>
             <button class="btn bg-orange-600" onclick="emu.reset(true)">RST HW</button>
+            <button class="btn bg-cyan-700" onclick="emu.bootFromBIOS()">Boot BIOS</button>
         </div>
     </div>
 
     <div class="bg-slate-900 border-b border-slate-800 p-1.5 flex gap-4 text-[10px] items-center justify-around shrink-0">
         <span class="font-bold text-cyan-400">CONTROL DE PERIFÉRICOS OPCIONALES:</span>
+        <label class="flex items-center gap-1.5 bg-slate-950/70 border border-slate-800 rounded px-2 py-1">
+            <span class="text-[9px] text-amber-300 font-bold">RAM</span>
+            <input type="range" id="ramSlider" min="8" max="64" step="8" value="16" class="w-24 accent-cyan-500" oninput="ui.setRAMSize(this.value)">
+            <span id="ramSizeLbl" class="text-green-400 font-bold w-10">16 MB</span>
+        </label>
         <label class="flex items-center gap-1.5 cursor-pointer select-none">
             <input type="checkbox" id="chkBIOS" checked onchange="sysBus.togglePeripheral('BIOS', this.checked)" class="accent-green-500">
             <span class="text-white font-semibold">BIOS ROM (0xF0000)</span>
@@ -221,13 +229,17 @@
             <span class="text-white font-semibold text-purple-300">PS/2 MOUSE (IRQ12)</span>
         </label>
         <label class="flex items-center gap-1.5 cursor-pointer select-none">
+            <input type="checkbox" id="chkAudio" checked onchange="sysBus.togglePeripheral('AUDIO', this.checked)" class="accent-green-500">
+            <span class="text-white font-semibold text-emerald-300">SB16 AUDIO (220h/IRQ5)</span>
+        </label>
+        <label class="flex items-center gap-1.5 cursor-pointer select-none">
             <input type="checkbox" id="chkPICPIT" checked onchange="sysBus.togglePeripheral('PICPIT', this.checked)" class="accent-green-500">
             <span class="text-white font-semibold">PIC/PIT</span>
         </label>
     </div>
 
     <div class="ide-container">
-        
+
         <div class="col-left">
             <div class="panel flex-1">
                 <div class="header">
@@ -236,7 +248,7 @@
                 </div>
                 <textarea id="asmInput" class="flex-1 w-full resize-none leading-tight font-mono text-[11px] text-cyan-300 bg-[#020617] p-2 border border-slate-800 rounded shadow-inner" spellcheck="false"></textarea>
             </div>
-            
+
             <div class="panel h-[25%]">
                 <div class="header">Logs de Compilación / Ensamblado</div>
                 <div id="buildLogs" class="flex-1 overflow-y-auto whitespace-pre-wrap leading-tight text-[9px] bg-[#020617] p-1 font-mono shadow-inner"></div>
@@ -297,16 +309,16 @@
                         <span class="reg-name text-yellow-400 font-bold">ESP</span><span id="rESP" class="reg-val text-yellow-400 font-bold">00000000</span>
                     </div>
                 </div>
-                
+
                 <div class="flex flex-wrap gap-1 text-[10px] bg-black p-1.5 rounded border border-slate-800 mb-2 shadow-inner" id="flagsBox"></div>
-                
+
                 <div class="text-[11px] font-bold text-green-400 truncate flex items-center bg-black px-2 py-1.5 border border-slate-700 rounded shadow-inner justify-between" id="lastInstr">
                     <span class="animate-pulse">ESPERANDO CPU...</span>
                     <span id="stallIndicator" class="text-red-400 text-[10px] ml-2 hidden animate-ping">STALL!</span>
                 </div>
             </div>
 
-            <div id="vgaHardwarePanel" class="panel h-auto peripheral-active border-2">
+            <div id="vgaHardwarePanel" class="panel min-h-[310px] peripheral-active border-2">
                 <div class="header">
                     <span>Monitor VGA <span id="vgaModeLbl" class="text-amber-400">(Mode 03h - Texto)</span></span>
                     <span class="text-green-500 font-bold text-[9px]" id="lblVGAStat">ONLINE</span>
@@ -355,7 +367,9 @@
                     </div>
                     <div class="text-[9px] flex flex-col gap-1 text-slate-400">
                         <div>Estado: <span id="fdcState" class="text-amber-400 font-bold">READY</span></div>
-                        <input type="file" id="floppyFile" class="mt-1 text-[8px] p-0.5 bg-slate-800 text-cyan-300 border-slate-600 rounded" accept=".img,.bin,.ima,.vfd,.sys" onchange="sysBus.floppy.loadImage(event)" title="Carga un archivo de imagen de disquete (.img) para arrancar OS Avanzado">
+                        <input type="file" id="floppyFile" class="mt-1 text-[8px] p-0.5 bg-slate-800 text-cyan-300 border-slate-600 rounded" accept=".img,.bin,.ima,.vfd,.sys" multiple onchange="sysBus.floppy.loadImage(event)" title="Carga una o más imágenes de disquete (.img)">
+                        <select id="bootDiskSelect" class="text-[8px] py-0.5 bg-slate-900 border-slate-700" onchange="sysBus.floppy.setBootIndex(this.value)"><option>Sin discos</option></select>
+                        <button class="btn bg-slate-700 hover:bg-slate-600 py-0.5 mt-0.5 text-[8px]" onclick="sysBus.floppy.addEmptyDisk()">+ Disquete</button>
                         <button class="btn bg-fuchsia-700 hover:bg-fuchsia-600 py-0.5 mt-0.5 text-[8px] shadow-[0_0_5px_rgba(162,28,175,0.6)]" onclick="emu.bootFloppy()">Bootear Disquete</button>
                     </div>
                 </div>
@@ -367,6 +381,8 @@
                     <div class="text-[9px] flex flex-col gap-1 text-slate-400">
                         <div>Registro LBA: <span id="hddLba" class="text-amber-400 font-bold">0x00000</span></div>
                         <div>Sectores: <span id="hddSect" class="text-cyan-400 font-bold">64 (Virtual)</span></div>
+                        <input type="file" id="hddFile" class="text-[8px] p-0.5 bg-slate-800 text-cyan-300 border-slate-600 rounded" accept=".img,.bin,.hdd,.vhd" multiple onchange="sysBus.hdd.loadImages(event)">
+                        <select id="bootOrderSelect" class="text-[8px] py-0.5 bg-slate-900 border-slate-700" onchange="sysBus.setBootOrder(this.value)"><option value="floppy">Boot: Floppy→HDD</option><option value="hdd">Boot: HDD→Floppy</option></select>
                     </div>
                 </div>
             </div>
@@ -413,7 +429,7 @@
                     <div class="text-slate-400 border-b border-slate-700 pb-0.5">Limit</div>
                     <div class="text-slate-400 border-b border-slate-700 pb-0.5">DPL</div>
                     <div class="text-slate-400 border-b border-slate-700 pb-0.5">32b</div>
-                    
+
                     <div class="reg-name text-left pl-1">CS</div><div id="sCS">0000</div><div id="bCS">00000000</div><div id="lCS">FFFF</div><div id="dCS">0</div><div id="32CS">0</div>
                     <div class="reg-name text-left pl-1">DS</div><div id="sDS">0000</div><div id="bDS">00000000</div><div id="lDS">FFFF</div><div id="dDS">0</div><div id="32DS">0</div>
                     <div class="reg-name text-left pl-1">SS</div><div id="sSS">0000</div><div id="bSS">00000000</div><div id="lSS">FFFF</div><div id="dSS">0</div><div id="32SS">0</div>
@@ -445,7 +461,7 @@
             <div class="panel flex-1 flex flex-col">
                 <div class="header">Monitoreo de Pila (SS:ESP/SP)</div>
                 <div id="stackDump" class="h-16 overflow-y-auto whitespace-pre leading-tight text-[10px] text-yellow-200 bg-[#020617] p-1 font-mono border border-slate-800 mb-2 shadow-inner"></div>
-                
+
                 <div class="header flex justify-between mt-0">
                     <span>Hardware / Kernel / Exception Logs</span>
                     <button class="btn bg-slate-700 py-0 text-[8px] h-4" onclick="document.getElementById('hwLogs').innerHTML=''">Limpiar</button>
@@ -542,21 +558,23 @@ class SystemBus {
         this.memSize = sizeMB * 1024 * 1024;
         this.physMem = new Uint8Array(this.memSize);
         this.view = new DataView(this.physMem.buffer);
-        
+
         this.biu = new BusInterfaceUnit();
         this.bios = new BIOSROM();
         this.floppy = new FloppyDiskController();
         this.hdd = new HDDController();
         this.pic = new ProgrammableInterruptController();
+        this.audio = new SoundBlaster16(this.pic);
+        this.bootOrder = 'floppy';
         this.pit = new ProgrammableIntervalTimer(this.pic);
-        this.kbd = new KBCController(this.pic); 
-        this.io = new IOPortsHandler(this); 
-        
+        this.kbd = new KBCController(this.pic);
+        this.io = new IOPortsHandler(this);
+
         this.vgaEnabled = true;
         this.vgaDirty = false;
         this.vgaMode = 0x03; // Default Text Mode
         this.vgaIndexReg = 0;
-        this.vgaCursorLocation = 0; 
+        this.vgaCursorLocation = 0;
     }
 
     initializeTextVRAM(clearChars = true) {
@@ -573,6 +591,8 @@ class SystemBus {
         const screen = document.getElementById('vgaScreen');
         const canvas = document.getElementById('vgaCanvas');
         const label = document.getElementById('vgaModeLbl');
+        const container = document.getElementById('mainVGAContainer');
+        if(container) { container.classList.toggle('mode-13h', targetMode === 0x13); container.classList.toggle('mode-03h', targetMode !== 0x13); }
         if (targetMode === 0x13) {
             if (screen) screen.classList.add('hidden-vga');
             if (canvas) canvas.classList.remove('hidden-vga');
@@ -596,7 +616,7 @@ class SystemBus {
         if(name === 'BIOS') { this.bios.enabled = enabled; }
         if(name === 'VGA') {
             this.vgaEnabled = enabled;
-            document.getElementById('vgaHardwarePanel').className = enabled ? "panel h-auto peripheral-active border-2" : "panel h-auto peripheral-inactive border-2";
+            document.getElementById('vgaHardwarePanel').className = enabled ? "panel min-h-[310px] peripheral-active border-2" : "panel min-h-[310px] peripheral-inactive border-2";
             document.getElementById('lblVGAStat').innerText = enabled ? "ONLINE" : "OFFLINE";
             document.getElementById('lblVGAStat').className = enabled ? "text-green-500 font-bold text-[9px]" : "text-red-500 font-bold text-[9px]";
         }
@@ -604,48 +624,60 @@ class SystemBus {
         if(name === 'HDD') { this.hdd.enabled = enabled; document.getElementById('hddHardwarePanel').className = enabled ? "panel border-2 peripheral-active" : "panel border-2 peripheral-inactive"; document.getElementById('lblHDDStat').className = enabled?"text-green-500":"text-red-500"; document.getElementById('lblHDDStat').innerText = enabled?"ON":"OFF"; }
         if(name === 'KBD') { this.kbd.kbdEnabled = enabled; document.getElementById('kbdHardwarePanel').className = enabled ? "panel peripheral-active border-2 p-1" : "panel peripheral-inactive border-2 p-1"; document.getElementById('lblKBDStat').className = enabled?"text-green-500":"text-red-500"; document.getElementById('lblKBDStat').innerText = enabled?"ON":"OFF"; }
         if(name === 'MOUSE') { this.kbd.mouseEnabled = enabled; document.getElementById('mouseHardwarePanel').className = enabled ? "panel peripheral-active border-2 p-1 border-purple-500" : "panel peripheral-inactive border-2 p-1 border-purple-900"; document.getElementById('lblMouseStat').className = enabled?"text-green-500":"text-red-500"; document.getElementById('lblMouseStat').innerText = enabled?"ON":"OFF"; }
-        if(name === 'PICPIT') { 
-            this.pic.enabled = enabled; this.pit.enabled = enabled; 
-            document.getElementById('picHardwarePanel').className = enabled ? "panel peripheral-active border-2 p-1" : "panel peripheral-inactive border-2 p-1"; 
-            document.getElementById('lblPICStat').className = enabled?"text-green-500":"text-red-500"; document.getElementById('lblPICStat').innerText = enabled?"ON":"OFF"; 
+        if(name === 'AUDIO') { this.audio.enabled = enabled; logHw(`[SB16] Audio ${enabled ? 'activado' : 'desactivado'}.`, enabled ? 'sys' : 'warn'); }
+        if(name === 'PICPIT') {
+            this.pic.enabled = enabled; this.pit.enabled = enabled;
+            document.getElementById('picHardwarePanel').className = enabled ? "panel peripheral-active border-2 p-1" : "panel peripheral-inactive border-2 p-1";
+            document.getElementById('lblPICStat').className = enabled?"text-green-500":"text-red-500"; document.getElementById('lblPICStat').innerText = enabled?"ON":"OFF";
         }
     }
 
-    read8(address) { 
-        if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) return this.bios.read8(address);
-        if(address < 0 || address >= this.memSize) return 0xFF; 
-        return this.view.getUint8(address); 
+    resizeMemory(sizeMB) {
+        const old = this.physMem;
+        this.memSize = sizeMB * 1024 * 1024;
+        this.physMem = new Uint8Array(this.memSize);
+        this.physMem.set(old.slice(0, Math.min(old.length, this.physMem.length)));
+        this.view = new DataView(this.physMem.buffer);
+        this.initializeTextVRAM(false);
+        logHw(`[RAM] Tamaño físico ajustado a ${sizeMB} MB.`, 'warn');
     }
-    read16(address) { 
+    setBootOrder(order) { this.bootOrder = order === 'hdd' ? 'hdd' : 'floppy'; logHw(`[BIOS] Orden de arranque: ${this.bootOrder === 'hdd' ? 'HDD→Floppy' : 'Floppy→HDD'}.`, 'sys'); }
+
+    read8(address) {
+        if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) return this.bios.read8(address);
+        if(address < 0 || address >= this.memSize) return 0xFF;
+        return this.view.getUint8(address);
+    }
+    read16(address) {
         if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) return this.bios.read8(address) | (this.bios.read8(address+1) << 8);
         if(address < 0 || address >= this.memSize - 1) return 0xFFFF;
-        return this.view.getUint16(address, true); 
+        return this.view.getUint16(address, true);
     }
-    read32(address) { 
+    read32(address) {
         if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) return this.bios.read8(address) | (this.bios.read8(address+1) << 8) | (this.bios.read8(address+2) << 16) | (this.bios.read8(address+3) << 24);
         if(address < 0 || address >= this.memSize - 3) return 0xFFFFFFFF;
-        return this.view.getUint32(address, true); 
+        return this.view.getUint32(address, true);
     }
 
-    write8(address, v) { 
+    write8(address, v) {
         if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) { this.bios.write8(address, v); return; }
         if(address < 0 || address >= this.memSize) return;
-        this.view.setUint8(address, v); 
-        if(address >= 0xB8000 && address < 0xB8FA0 && this.vgaEnabled && this.vgaMode === 0x03) this.vgaDirty = true; 
+        this.view.setUint8(address, v);
+        if(address >= 0xB8000 && address < 0xB8FA0 && this.vgaEnabled && this.vgaMode === 0x03) this.vgaDirty = true;
         if(address >= 0xA0000 && address < 0xB0000 && this.vgaEnabled && this.vgaMode === 0x13) this.vgaDirty = true;
     }
-    write16(address, v) { 
+    write16(address, v) {
         if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) { this.bios.write8(address, v & 0xFF); this.bios.write8(address+1, (v>>8) & 0xFF); return; }
         if(address < 0 || address >= this.memSize - 1) return;
-        this.view.setUint16(address, v, true); 
-        if(address >= 0xB8000 && address < 0xB8FA0 && this.vgaEnabled && this.vgaMode === 0x03) this.vgaDirty = true; 
+        this.view.setUint16(address, v, true);
+        if(address >= 0xB8000 && address < 0xB8FA0 && this.vgaEnabled && this.vgaMode === 0x03) this.vgaDirty = true;
         if(address >= 0xA0000 && address < 0xB0000 && this.vgaEnabled && this.vgaMode === 0x13) this.vgaDirty = true;
     }
-    write32(address, v) { 
+    write32(address, v) {
         if(this.bios.enabled && ((address >= 0xF0000 && address <= 0xFFFFF) || this.isHighBiosAlias(address))) { this.bios.write8(address, v & 0xFF); this.bios.write8(address+1, (v>>8) & 0xFF); this.bios.write8(address+2, (v>>16) & 0xFF); this.bios.write8(address+3, (v>>24) & 0xFF); return; }
         if(address < 0 || address >= this.memSize - 3) return;
-        this.view.setUint32(address, v, true); 
-        if(address >= 0xB8000 && address < 0xB8FA0 && this.vgaEnabled && this.vgaMode === 0x03) this.vgaDirty = true; 
+        this.view.setUint32(address, v, true);
+        if(address >= 0xB8000 && address < 0xB8FA0 && this.vgaEnabled && this.vgaMode === 0x03) this.vgaDirty = true;
         if(address >= 0xA0000 && address < 0xB0000 && this.vgaEnabled && this.vgaMode === 0x13) this.vgaDirty = true;
     }
 }
@@ -667,11 +699,12 @@ class IOPortsHandler {
             if(this.cmosIndex === 0x07) return toBCD(d.getDate());
             if(this.cmosIndex === 0x08) return toBCD(d.getMonth() + 1);
             if(this.cmosIndex === 0x09) return toBCD(d.getFullYear() % 100);
-            if(this.cmosIndex === 0x14) return 0x20; 
+            if(this.cmosIndex === 0x14) return 0x20;
             return this.cmos[this.cmosIndex & 0x7F];
         }
         if(port >= 0x00 && port <= 0x0F) return this.dma[port];
-        return 0xFF; 
+        if(this.bus.audio && this.bus.audio.ports.includes(port)) return this.bus.audio.in8(port);
+        return 0xFF;
     }
     in16(port) { return this.in8(port) | (this.in8(port+1)<<8); }
     in32(port) { return this.in16(port) | (this.in16(port+2)<<16); }
@@ -679,6 +712,7 @@ class IOPortsHandler {
         if(port === 0x70) { this.cmosIndex = val & 0x7F; }
         else if(port === 0x71) { this.cmos[this.cmosIndex] = val; }
         else if(port >= 0x00 && port <= 0x0F) { this.dma[port] = val; }
+        else if(this.bus.audio && this.bus.audio.ports.includes(port)) { this.bus.audio.out8(port, val); }
     }
     out16(port, val) { this.out8(port, val&0xFF); this.out8(port+1, (val>>8)&0xFF); }
     out32(port, val) { this.out16(port, val&0xFFFF); this.out16(port+2, (val>>16)&0xFFFF); }
@@ -690,24 +724,24 @@ class IOPortsHandler {
 class ProgrammableInterruptController {
     constructor() {
         this.enabled = true; this.ports = [0x20, 0x21, 0xA0, 0xA1];
-        this.imr1 = 0xFF; this.irr1 = 0x00; this.isr1 = 0x00; this.baseVector1 = 0x08; 
+        this.imr1 = 0xFF; this.irr1 = 0x00; this.isr1 = 0x00; this.baseVector1 = 0x08;
         this.imr2 = 0xFF; this.irr2 = 0x00; this.isr2 = 0x00; this.baseVector2 = 0x70;
     }
     in8(port) {
         if(!this.enabled) return 0xFF;
         if(port === 0x21) return this.imr1; if(port === 0xA1) return this.imr2;
-        return 0; 
+        return 0;
     }
     out8(port, val) {
         if(!this.enabled) return;
-        if(port === 0x21) { this.imr1 = val; document.getElementById('picImr').innerText = "0x" + hex(val, 2); } 
-        else if(port === 0xA1) { this.imr2 = val; } 
-        else if(port === 0x20) { if(val === 0x20) { for(let i=0; i<8; i++){ if((this.isr1 & (1<<i)) !== 0) { this.isr1 &= ~(1<<i); break; } } } } 
+        if(port === 0x21) { this.imr1 = val; document.getElementById('picImr').innerText = "0x" + hex(val, 2); }
+        else if(port === 0xA1) { this.imr2 = val; }
+        else if(port === 0x20) { if(val === 0x20) { for(let i=0; i<8; i++){ if((this.isr1 & (1<<i)) !== 0) { this.isr1 &= ~(1<<i); break; } } } }
         else if(port === 0xA0) { if(val === 0x20) { for(let i=0; i<8; i++){ if((this.isr2 & (1<<i)) !== 0) { this.isr2 &= ~(1<<i); break; } } } }
     }
     requestInterrupt(irqLine) {
         if(!this.enabled) return;
-        if(irqLine < 8) { if((this.imr1 & (1 << irqLine)) === 0) this.irr1 |= (1 << irqLine); } 
+        if(irqLine < 8) { if((this.imr1 & (1 << irqLine)) === 0) this.irr1 |= (1 << irqLine); }
         else {
             let slaveLine = irqLine - 8;
             if((this.imr2 & (1 << slaveLine)) === 0) { this.irr2 |= (1 << slaveLine); this.requestInterrupt(2); }
@@ -732,15 +766,15 @@ class ProgrammableInterruptController {
 // ============================================================================
 class ProgrammableIntervalTimer {
     constructor(pic) {
-        this.enabled = true; this.ports = [0x40, 0x41, 0x42, 0x43]; this.pic = pic; 
+        this.enabled = true; this.ports = [0x40, 0x41, 0x42, 0x43]; this.pic = pic;
         this.counter0 = 0xFFFF; this.currentCount0 = 0xFFFF; this.ticksGenerated = 0;
     }
     in8(port) { return 0xFF; }
-    out8(port, val) { 
+    out8(port, val) {
         if(!this.enabled) return;
         if(port === 0x40) {
             this.counter0 = (this.counter0 << 8) | val;
-            if(this.counter0 > 0xFFFF) this.counter0 = val; 
+            if(this.counter0 > 0xFFFF) this.counter0 = val;
             if(this.counter0 === 0) this.counter0 = 0xFFFF;
         }
     }
@@ -750,7 +784,7 @@ class ProgrammableIntervalTimer {
         if(this.currentCount0 <= 0) {
             this.currentCount0 = this.counter0; this.ticksGenerated++;
             document.getElementById('pitTicks').innerText = this.ticksGenerated;
-            this.pic.requestInterrupt(0); 
+            this.pic.requestInterrupt(0);
         }
     }
 }
@@ -766,7 +800,7 @@ class KBCController {
         this.mouseBuffer = []; // Mouse Buffer
         this.status = 0x14; // SYS FLAG + INH
         this.lastPort60Read = 0;
-        
+
         this.keymap = {
             'Escape': 0x01, '1': 0x02, '2': 0x03, '3': 0x04, '4': 0x05, '5': 0x06, '6': 0x07, '7': 0x08, '8': 0x09, '9': 0x0A, '0': 0x0B, '-': 0x0C, '=': 0x0D, 'Backspace': 0x0E,
             'Tab': 0x0F, 'q': 0x10, 'w': 0x11, 'e': 0x12, 'r': 0x13, 't': 0x14, 'y': 0x15, 'u': 0x16, 'i': 0x17, 'o': 0x18, 'p': 0x19, '[': 0x1A, ']': 0x1B, 'Enter': 0x1C,
@@ -800,17 +834,17 @@ class KBCController {
 
     pushMousePacket(dx, dy, btnLeft, btnRight, btnMiddle) {
         if(!this.mouseEnabled) return;
-        
+
         let status = 0x08; // Bit 3 always 1
         if(btnLeft) status |= 0x01;
         if(btnRight) status |= 0x02;
         if(btnMiddle) status |= 0x04;
         if(dx < 0) status |= 0x10;
         if(dy < 0) status |= 0x20;
-        
+
         let cx = dx & 0xFF; if(dx < -255 || dx > 255) status |= 0x40; // X Ovf
         let cy = dy & 0xFF; if(dy < -255 || dy > 255) status |= 0x80; // Y Ovf
-        
+
         this.mouseBuffer.push(status);
         this.mouseBuffer.push(cx);
         this.mouseBuffer.push(cy);
@@ -844,9 +878,46 @@ class KBCController {
         }
         return 0xFF;
     }
-    out8(port, val) { 
+    out8(port, val) {
         if(port === 0x64) { /* Command port */ }
         if(port === 0x60) { /* Config port */ }
+    }
+}
+
+// ============================================================================
+// AUDIO SOUND BLASTER 16 (DSP 4.x básico: reset, IRQ, mixer y DMA FIFO)
+// ============================================================================
+class SoundBlaster16 {
+    constructor(pic) {
+        this.enabled = true; this.pic = pic;
+        this.base = 0x220; this.ports = [0x220,0x221,0x222,0x223,0x224,0x225,0x226,0x227,0x228,0x229,0x22A,0x22B,0x22C,0x22D,0x22E,0x22F,0x388,0x389];
+        this.resetState();
+    }
+    resetState() { this.readBuffer = []; this.writeReady = true; this.irqPending = false; this.sampleRate = 22050; this.speaker = false; this.mixerIndex = 0; this.mixer = new Uint8Array(256); this.timeConstant = 0; }
+    in8(port) {
+        if(!this.enabled) return 0xFF;
+        if(port === this.base + 0x0A) return this.readBuffer.shift() ?? 0xFF;
+        if(port === this.base + 0x0C) return this.writeReady ? 0x7F : 0xFF;
+        if(port === this.base + 0x0E) { this.irqPending = false; return 0x80; }
+        if(port === this.base + 0x04) return this.mixerIndex;
+        if(port === this.base + 0x05) return this.mixer[this.mixerIndex];
+        return 0xFF;
+    }
+    out8(port, val) {
+        if(!this.enabled) return;
+        val &= 0xFF;
+        if(port === this.base + 0x06) { if(val === 1) this.resetState(); else this.readBuffer.push(0xAA); return; }
+        if(port === this.base + 0x04) { this.mixerIndex = val; return; }
+        if(port === this.base + 0x05) { this.mixer[this.mixerIndex] = val; return; }
+        if(port === this.base + 0x0C) this.handleDSPCommand(val);
+    }
+    handleDSPCommand(cmd) {
+        if(cmd === 0xD1) { this.speaker = true; logHw('[SB16] Speaker DSP ON.', 'io'); }
+        else if(cmd === 0xD3) { this.speaker = false; logHw('[SB16] Speaker DSP OFF.', 'io'); }
+        else if(cmd === 0xE1) { this.readBuffer.push(0x04, 0x05); } // DSP v4.05, compatible SB16
+        else if(cmd === 0x40) { this.expect = 'timeConstant'; }
+        else if(this.expect === 'timeConstant') { this.timeConstant = cmd; this.sampleRate = Math.floor(1000000 / (256 - cmd)); this.expect = null; }
+        else if(cmd === 0x14 || cmd === 0x1C || cmd === 0x90 || cmd === 0x91) { this.irqPending = true; if(this.pic) this.pic.requestInterrupt(5); logHw(`[SB16] DMA audio cmd 0x${hex(cmd,2)} aceptado (${this.sampleRate} Hz).`, 'io'); }
     }
 }
 
@@ -860,9 +931,9 @@ class BIOSROM {
         this.sourceName = "Integrada";
         this.buildBuiltInImage();
         this.builtInData = new Uint8Array(this.data);
-        
+
         // Mouse State para INT 33h
-        this.mouseX = 0; this.mouseY = 0; this.mouseBtn = 0; 
+        this.mouseX = 0; this.mouseY = 0; this.mouseBtn = 0;
         this.mouseVisible = false;
         this.mouseInitialized = false; // REGLA DE ORO: Mouse no detectado hasta usar INT 33h
     }
@@ -910,10 +981,10 @@ class BIOSROM {
         if (sysBusRef) sysBusRef.vgaDirty = true;
         if (emu) emu.reset(true);
     }
-    
+
     initIVT(sysBus) {
         let dummyIretAddr = 0xF0000 + 0x100;
-        this.data[0x100] = 0xCF; 
+        this.data[0x100] = 0xCF;
         for(let i=0; i<256; i++) {
             sysBus.write16(i*4, dummyIretAddr & 0xFFFF);
             sysBus.write16(i*4 + 2, dummyIretAddr >>> 4);
@@ -931,23 +1002,46 @@ class FloppyDiskController {
     constructor() {
         this.enabled = true; this.ports = [0x3F0, 0x3F1, 0x3F2, 0x3F3, 0x3F4, 0x3F5, 0x3F6, 0x3F7];
         this.mainStatusRegister = 0x80; this.dataRegister = 0; this.currentTrack = 0;
+        this.disks = []; this.bootIndex = 0;
         this.diskData = new Uint8Array(1474560);
         this.hasDisk = false;
     }
+    refreshBootSelect() {
+        const sel = document.getElementById('bootDiskSelect');
+        if(!sel) return;
+        sel.innerHTML = '';
+        if(this.disks.length === 0) sel.innerHTML = '<option>Sin discos</option>';
+        this.disks.forEach((d, i) => { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i === this.bootIndex ? '★ ' : ''}A${i}: ${d.name} (${Math.ceil(d.data.length/1024)} KB)`; sel.appendChild(opt); });
+        sel.value = String(this.bootIndex);
+    }
+    setBootIndex(index) {
+        const idx = Math.max(0, Math.min(Number(index) || 0, this.disks.length - 1));
+        this.bootIndex = idx;
+        if(this.disks[idx]) { this.diskData = this.disks[idx].data; this.hasDisk = true; }
+        this.refreshBootSelect();
+    }
+    addEmptyDisk() {
+        this.disks.push({ name: `empty-${this.disks.length}.img`, data: new Uint8Array(1474560) });
+        this.setBootIndex(this.disks.length - 1);
+        logHw(`[FDC] Disquete vacío añadido en A${this.bootIndex}:`, 'sys');
+    }
     loadImage(event) {
-        let file = event.target.files[0];
-        if (!file) return;
-        let reader = new FileReader();
-        reader.onload = (e) => {
-            let buf = new Uint8Array(e.target.result);
-            this.diskData.fill(0); 
-            this.diskData.set(buf.slice(0, Math.min(buf.length, 1474560)));
-            this.hasDisk = true;
-            logHw(`[FDC] Disquete cargado: ${file.name}`, 'sys');
-            document.getElementById('fdcState').innerText = "OS DISK INSERTED";
-            document.getElementById('fdcState').className = "text-green-400 font-bold";
-        };
-        reader.readAsArrayBuffer(file);
+        let files = Array.from(event.target.files || []);
+        if (!files.length) return;
+        files.forEach((file) => {
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                let buf = new Uint8Array(e.target.result);
+                let data = new Uint8Array(Math.max(1474560, buf.length));
+                data.set(buf.slice(0, data.length));
+                this.disks.push({ name: file.name, data });
+                this.setBootIndex(this.disks.length === 1 ? 0 : this.bootIndex);
+                logHw(`[FDC] Disquete cargado: ${file.name}`, 'sys');
+                document.getElementById('fdcState').innerText = `${this.disks.length} DISK(S)`;
+                document.getElementById('fdcState').className = "text-green-400 font-bold";
+            };
+            reader.readAsArrayBuffer(file);
+        });
     }
     in8(port) { return !this.enabled ? 0xFF : (port === 0x3F4 ? this.mainStatusRegister : (port === 0x3F5 ? this.dataRegister : 0)); }
     out8(port, val) {
@@ -962,18 +1056,48 @@ class FloppyDiskController {
 class HDDController {
     constructor() {
         this.enabled = true; this.ports = [0x1F0, 0x1F1, 0x1F2, 0x1F3, 0x1F4, 0x1F5, 0x1F6, 0x1F7];
-        this.sectorCount = 1; this.sectorNumber = 1; this.cylinderLow = 0; this.cylinderHigh = 0; this.statusRegister = 0x50; 
+        this.sectorCount = 1; this.sectorNumber = 1; this.cylinderLow = 0; this.cylinderHigh = 0; this.statusRegister = 0x50; this.drives = []; this.activeDrive = 0; this.dataBuffer = [];
     }
-    in8(port) { return !this.enabled ? 0xFF : (port === 0x1F7 ? this.statusRegister : 0); }
+    refreshLabel() { const el = document.getElementById('hddSect'); if(el) el.innerText = this.drives.length ? `${Math.floor((this.drives[this.activeDrive]?.data.length || 0)/512)} (${this.drives.length} img)` : '64 (Virtual)'; }
+    loadImages(event) {
+        const files = Array.from(event.target.files || []);
+        files.forEach((file) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.drives.push({ name: file.name, data: new Uint8Array(e.target.result) });
+                if(this.drives.length === 1) this.activeDrive = 0;
+                this.refreshLabel();
+                logHw(`[ATA] Disco duro añadido: ${file.name}`, 'sys');
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    }
+    currentLBA() { return ((this.cylinderHigh << 16) | (this.cylinderLow << 8) | this.sectorNumber) >>> 0; }
+    prepareRead() {
+        const drive = this.drives[this.activeDrive];
+        const count = this.sectorCount || 256;
+        const lba = this.currentLBA();
+        this.dataBuffer = [];
+        for(let i=0; i<count*512; i++) this.dataBuffer.push(drive ? (drive.data[lba*512+i] || 0) : 0);
+        this.statusRegister = 0x58;
+    }
+    in8(port) {
+        if(!this.enabled) return 0xFF;
+        if(port === 0x1F7) return this.statusRegister;
+        if(port === 0x1F0) return this.dataBuffer.shift() ?? 0;
+        return 0;
+    }
+    in16(port) { return this.in8(port) | (this.in8(port) << 8); }
+    in32(port) { return this.in16(port) | (this.in16(port) << 16); }
     out8(port, val) {
         if(!this.enabled) return;
         switch(port) {
             case 0x1F2: this.sectorCount = val; break; case 0x1F3: this.sectorNumber = val; break;
             case 0x1F4: this.cylinderLow = val; break; case 0x1F5: this.cylinderHigh = val; break;
             case 0x1F7:
-                if(val === 0x20) { 
-                    this.statusRegister = 0x58; 
-                    document.getElementById('hddLba').innerText = "0x" + hex((this.cylinderHigh << 16) | (this.cylinderLow << 8) | this.sectorNumber, 5); 
+                if(val === 0x20) {
+                    this.prepareRead();
+                    document.getElementById('hddLba').innerText = "0x" + hex(this.currentLBA(), 5);
                 }
                 break;
         }
@@ -985,7 +1109,7 @@ class HDDController {
 // ============================================================================
 class L1Cache {
     constructor(bus) {
-        this.bus = bus; this.mode = 'WT'; 
+        this.bus = bus; this.mode = 'WT';
         this.numSets = 256; // 16 KB Cache L1 for i486 DX4
         this.ways = 4; this.lineSize = 16;
         this.hits = 0; this.misses = 0;
@@ -1082,24 +1206,24 @@ class Corei486 {
         this.bus = bus;
         this.cache = new L1Cache(bus);
         this.pipeline = new Pipeline();
-        
-        this.gprBuf = new ArrayBuffer(32); this.gpr = new DataView(this.gprBuf); 
-        this.cr = new Uint32Array(5); this.dr = new Uint32Array(8); 
-        
-        this.segs = new Uint16Array(6); 
+
+        this.gprBuf = new ArrayBuffer(32); this.gpr = new DataView(this.gprBuf);
+        this.cr = new Uint32Array(5); this.dr = new Uint32Array(8);
+
+        this.segs = new Uint16Array(6);
         this.desc = Array(6).fill(0).map(() => ({ base: 0, limit: 0xFFFF, dpl: 0, is32: false, rw: true, present: true }));
-        this.gdtr = { base: 0, limit: 0xFFFF }; this.idtr = { base: 0, limit: 0x3FF }; 
-        
+        this.gdtr = { base: 0, limit: 0xFFFF }; this.idtr = { base: 0, limit: 0x3FF };
+
         this.fpu_st = new Float64Array(8); this.fpu_tag = new Uint8Array(8).fill(3);
         this.fpu_top = 0; this.fpu_cw = 0x037F; this.fpu_sw = 0;
         this.inException = false;
-        
+
         this.reset(true);
     }
 
     reset(hard = false) {
         if(hard) {
-            this.cr.fill(0); this.cr[0] = 0x60000010; 
+            this.cr.fill(0); this.cr[0] = 0x60000010;
             this.cache.flush();
             this.bus.physMem.fill(0);
             this.bus.bios.initIVT(this.bus);
@@ -1112,31 +1236,54 @@ class Corei486 {
             // No se escribe fuera de la RAM física disponible, evitando pantallas mudas por accesos inválidos.
         }
         this.dr.fill(0); this.eflags = 0x00000002; this.eip = 0x00007C00;
-        
+
         for(let i=0; i<32; i+=4) this.gpr.setUint32(i, 0, true);
-        this.gpr.setUint32(8, 0x00000400, true); 
-        this.gpr.setUint32(16, 0x00007C00, true); 
-        
+        this.gpr.setUint32(8, 0x00000400, true);
+        this.gpr.setUint32(16, 0x00007C00, true);
+
         for(let i=0; i<6; i++) { this.segs[i] = 0; this.desc[i] = { base: 0, limit: 0xFFFF, dpl: 0, is32: false, rw: true, present: true }; }
         this.cpl = 0; this.cycles = 0; this.halted = false; this.inException = false;
-        
+
         this.fpu_top = 0; this.fpu_cw = 0x037F; this.fpu_sw = 0; this.fpu_tag.fill(3);
-        
+
         this.pipeline.flush();
         logHw("i486 DX4 Reiniciado. Sistema Base 100% Blindado y Seguro.", "warn");
         if(typeof ui !== 'undefined') ui.update();
     }
-    
+
     bootFloppy() {
         if(!this.bus.floppy.hasDisk) { logHw("¡ERROR! Carga primero una imagen .IMG.", "err"); return; }
         this.reset(true);
-        for(let i=0; i<512; i++) { this.bus.write8(0x7C00 + i, this.bus.floppy.diskData[i]); }
+        const bootDisk = this.bus.floppy.disks[this.bus.floppy.bootIndex]?.data || this.bus.floppy.diskData;
+        for(let i=0; i<512; i++) { this.bus.write8(0x7C00 + i, bootDisk[i] || 0); }
         this.eip = 0x7C00;
         this.loadSegReg(1, 0x0000); this.loadSegReg(3, 0x0000); this.loadSegReg(0, 0x0000); this.loadSegReg(2, 0x0000);
         this.set16(4, 0x7C00); this.set8(2, 0x00);
-        
+
         logHw("[BIOS] Sector de Boot cargado en 0000:7C00. Transfiriendo control a OS...", "warn");
         if(typeof ui !== 'undefined') ui.update();
+    }
+
+    bootFromBIOS() {
+        const tryFloppy = () => {
+            if(!this.bus.floppy.hasDisk) return false;
+            this.bootFloppy();
+            return true;
+        };
+        const tryHDD = () => {
+            const drive = this.bus.hdd.drives[this.bus.hdd.activeDrive];
+            if(!drive || !drive.data || drive.data.length < 512) return false;
+            this.reset(true);
+            for(let i=0; i<512; i++) this.bus.write8(0x7C00 + i, drive.data[i] || 0);
+            this.eip = 0x7C00;
+            this.loadSegReg(1, 0x0000); this.loadSegReg(3, 0x0000); this.loadSegReg(0, 0x0000); this.loadSegReg(2, 0x0000);
+            this.set16(4, 0x7C00); this.set8(2, 0x80);
+            logHw(`[BIOS] Sector de Boot HDD cargado desde ${drive.name} en 0000:7C00.`, 'warn');
+            if(typeof ui !== 'undefined') ui.update();
+            return true;
+        };
+        const booted = this.bus.bootOrder === 'hdd' ? (tryHDD() || tryFloppy()) : (tryFloppy() || tryHDD());
+        if(!booted) logHw('[BIOS] No hay medios arrancables según el orden seleccionado.', 'err');
     }
 
     reg32(idx) { return this.gpr.getUint32((idx&7)*4, true); } set32(idx, v) { this.gpr.setUint32((idx&7)*4, v, true); }
@@ -1153,11 +1300,11 @@ class Corei486 {
     get IF() { return this.fBit(0x200); } set IF(v) { this.fSet(0x200, v); }
     get DF() { return this.fBit(0x400); } set DF(v) { this.fSet(0x400, v); }
     get OF() { return this.fBit(0x800); } set OF(v) { this.fSet(0x800, v); }
-    
+
     updSZP(res, sz) {
         let m = (sz===32) ? 0xFFFFFFFF : (sz===16 ? 0xFFFF : 0xFF);
         let s = (sz===32) ? 0x80000000 : (sz===16 ? 0x8000 : 0x80);
-        let r = res & m; 
+        let r = res & m;
         this.ZF = (r === 0); this.SF = (r & s) !== 0;
         let p = r & 0xFF; p^=p>>4; p^=p>>2; p^=p>>1; this.PF = (p&1)===0;
     }
@@ -1178,7 +1325,7 @@ class Corei486 {
                 let ip = this.bus.read16(idtBase + vec * 4); let cs = this.bus.read16(idtBase + vec * 4 + 2);
                 if (ip === 0 && cs === 0) return; // Parar si no hay handler de BIOS
                 this.halted = false;
-                this.push16(this.eflags & 0xFFFF); this.push16(this.segs[1]); this.push16(this.eip);     
+                this.push16(this.eflags & 0xFFFF); this.push16(this.segs[1]); this.push16(this.eip);
                 this.IF = false; this.TF = false;
                 this.loadSegReg(1, cs); this.eip = ip;
             } else {
@@ -1230,7 +1377,7 @@ class Corei486 {
         let gran = (d1 & 0x00800000) !== 0; if (gran) lim = (lim << 12) | 0xFFF;
         let dpl = (d1 >> 13) & 3; let present = (d1 & 0x00008000) !== 0; let is32 = (d1 & 0x00400000) !== 0;
 
-        if (segIdx === 1) { if (this.cpl !== dpl) { this.raiseException(13, selector & 0xFFFC); return; } }
+        if (segIdx === 1) { if (this.cpl !== dpl) { this.raiseException(13, selector & 0xFFFC); return; } this.cpl = selector & 3; }
         else if (segIdx === 2) { if (rpl !== this.cpl || dpl !== this.cpl) { this.raiseException(12, selector & 0xFFFC); return; } }
         if (!present) { this.raiseException(11, selector & 0xFFFC); return; }
 
@@ -1241,9 +1388,9 @@ class Corei486 {
         let desc = this.desc[segIdx];
         if (!desc.present) { this.raiseException(11, 0); return 0; }
         if (offset > desc.limit && (this.cr[0] & 1)) { this.raiseException(13, 0); return 0; }
-        
+
         let linAddr = U32(desc.base + offset);
-        if (this.cr[0] & 0x80000000) { 
+        if (this.cr[0] & 0x80000000) {
             let pdIdx = linAddr >>> 22; let ptIdx = (linAddr >> 12) & 0x3FF; let pageOff = linAddr & 0xFFF;
             let pde = this.bus.read32((this.cr[3] & 0xFFFFF000) + pdIdx * 4);
             if (!(pde & 1)) { this.cr[2] = linAddr; this.raiseException(14, (isWrite?2:0)); return 0; }
@@ -1276,26 +1423,26 @@ class Corei486 {
     fSetSt(i, v) { this.fpu_st[(this.fpu_top+i)&7] = v; }
 
     modrm(is32, a32=true) {
-        const mrm = this.f8(); 
+        const mrm = this.f8();
         const mod = mrm>>6, reg = (mrm>>3)&7, rm = mrm&7;
-        let addr = 0, isMem = (mod !== 3), seg = 3; 
-        
-        if(!isMem) return {mod,reg,rm,isMem,addr:rm,seg}; 
-        
+        let addr = 0, isMem = (mod !== 3), seg = 3;
+
+        if(!isMem) return {mod,reg,rm,isMem,addr:rm,seg};
+
         if(a32) {
             let base = this.reg32(rm);
-            if(rm===4) { 
-                const sib = this.f8(); 
+            if(rm===4) {
+                const sib = this.f8();
                 const scale = 1<<(sib>>6), ix = (sib>>3)&7, bx = sib&7;
                 let ixVal = ix===4 ? 0 : this.reg32(ix);
                 base = (bx===5 && mod===0) ? this.f32() : this.reg32(bx);
-                addr = U32(base + (ixVal * scale)); 
-                if(bx===4 || bx===5) seg = 2; 
-            } else if(mod===0 && rm===5) { 
-                addr = this.f32(); 
-            } else { 
-                addr = base; 
-                if(rm===5) seg = 2; 
+                addr = U32(base + (ixVal * scale));
+                if(bx===4 || bx===5) seg = 2;
+            } else if(mod===0 && rm===5) {
+                addr = this.f32();
+            } else {
+                addr = base;
+                if(rm===5) seg = 2;
             }
             if(mod===1) addr = U32(addr + I8(this.f8()));
             if(mod===2) addr = U32(addr + I32(this.f32()));
@@ -1304,7 +1451,7 @@ class Corei486 {
             if(mod===0 && rm===6) { addr = this.f16(); seg=3; }
             else {
                 addr = bases[rm];
-                if(rm===2 || rm===3 || rm===6) seg=2; 
+                if(rm===2 || rm===3 || rm===6) seg=2;
                 if(mod===1) addr = U16(addr + I8(this.f8()));
                 if(mod===2) addr = U16(addr + I16(this.f16()));
             }
@@ -1315,33 +1462,33 @@ class Corei486 {
     alu(op, d, s, size) {
         let res = 0, m = size, ms = (size===32) ? 0xFFFFFFFF : (size===16 ? 0xFFFF : 0xFF);
         switch(op) {
-            case 0: res=U32(d+s); this.updSZP(res,m); this.CF=(res>ms); this.OF=(((d^res)&(s^res))>>(m-1))&1; this.AF=(((d^s^res)&0x10)!==0); break; 
-            case 1: res=U32(d|s); this.updSZP(res,m); this.CF=false; this.OF=false; this.AF=false; break; 
-            case 2: res=U32(d+s+(this.CF?1:0)); this.updSZP(res,m); this.CF=(res>ms); this.OF=(((d^res)&(s^res))>>(m-1))&1; this.AF=(((d^s^res)&0x10)!==0); break; 
-            case 3: res=U32(d-s-(this.CF?1:0)); this.updSZP(res,m); this.CF=(d<s+(this.CF?1:0)); this.OF=(((d^s)&(d^res))>>(m-1))&1; this.AF=(((d^s^res)&0x10)!==0); break; 
-            case 4: res=U32(d&s); this.updSZP(res,m); this.CF=false; this.OF=false; this.AF=false; break; 
-            case 5: case 7: res=U32(d-s); this.updSZP(res,m); this.CF=(d<s); this.OF=(((d^s)&(d^res))>>(m-1))&1; this.AF=(((d^s^res)&0x10)!==0); break; 
-            case 6: res=U32(d^s); this.updSZP(res,m); this.CF=false; this.OF=false; this.AF=false; break; 
+            case 0: res=U32(d+s); this.updSZP(res,m); this.CF=(res>ms); this.OF=(((d^res)&(s^res))>>(m-1))&1; this.AF=(((d^s^res)&0x10)!==0); break;
+            case 1: res=U32(d|s); this.updSZP(res,m); this.CF=false; this.OF=false; this.AF=false; break;
+            case 2: res=U32(d+s+(this.CF?1:0)); this.updSZP(res,m); this.CF=(res>ms); this.OF=(((d^res)&(s^res))>>(m-1))&1; this.AF=(((d^s^res)&0x10)!==0); break;
+            case 3: res=U32(d-s-(this.CF?1:0)); this.updSZP(res,m); this.CF=(d<s+(this.CF?1:0)); this.OF=(((d^s)&(d^res))>>(m-1))&1; this.AF=(((d^s^res)&0x10)!==0); break;
+            case 4: res=U32(d&s); this.updSZP(res,m); this.CF=false; this.OF=false; this.AF=false; break;
+            case 5: case 7: res=U32(d-s); this.updSZP(res,m); this.CF=(d<s); this.OF=(((d^s)&(d^res))>>(m-1))&1; this.AF=(((d^s^res)&0x10)!==0); break;
+            case 6: res=U32(d^s); this.updSZP(res,m); this.CF=false; this.OF=false; this.AF=false; break;
         }
         return res;
     }
 
     checkCC(cond) {
         switch(cond) {
-            case 0: return this.OF; case 1: return !this.OF; case 2: return this.CF; case 3: return !this.CF; 
-            case 4: return this.ZF; case 5: return !this.ZF; case 6: return this.CF || this.ZF; case 7: return !this.CF && !this.ZF; 
+            case 0: return this.OF; case 1: return !this.OF; case 2: return this.CF; case 3: return !this.CF;
+            case 4: return this.ZF; case 5: return !this.ZF; case 6: return this.CF || this.ZF; case 7: return !this.CF && !this.ZF;
             case 8: return this.SF; case 9: return !this.SF; case 10: return this.PF; case 11: return !this.PF;
-            case 12: return this.SF !== this.OF; case 13: return this.SF === this.OF; 
-            case 14: return this.ZF || (this.SF !== this.OF); case 15: return !this.ZF && (this.SF === this.OF); 
+            case 12: return this.SF !== this.OF; case 13: return this.SF === this.OF;
+            case 14: return this.ZF || (this.SF !== this.OF); case 15: return !this.ZF && (this.SF === this.OF);
             default: return false;
         }
     }
 
     step(isManual = false) {
         if (this.IF && this.bus.pic.hasInterrupt()) {
-            this.halted = false; 
+            this.halted = false;
             let vector = this.bus.pic.getVector();
-            this.int(vector, true); 
+            this.int(vector, true);
         }
 
         if(this.halted) {
@@ -1350,7 +1497,7 @@ class Corei486 {
             if (!this.IF && isManual) logHw("AVISO: CPU Halted con IF=0 (Interrupts Deshabilitadas).", "warn");
             return;
         }
-        
+
         if(debuggerSys && debuggerSys.breakpoints.has(this.eip)) {
             if(!debuggerSys.ignoringBp) { emu.stop(); debuggerSys.ignoringBp = true; ui.update(); return; }
         }
@@ -1362,10 +1509,10 @@ class Corei486 {
         let op = this.f8(), mnem = "DESCONOCIDO";
 
         while(true) {
-            if(op===0xF0) lock=true; 
-            else if(op===0xF2) repnz=true; 
-            else if(op===0xF3) rep=true; 
-            else if(op===0x66) o32=!o32; 
+            if(op===0xF0) lock=true;
+            else if(op===0xF2) repnz=true;
+            else if(op===0xF3) rep=true;
+            else if(op===0x66) o32=!o32;
             else if(op===0x67) a32=!a32;
             else if(op===0x2E) currentSegOverride=1; else if(op===0x3E) currentSegOverride=3;
             else if(op===0x26) currentSegOverride=2; else if(op===0x36) currentSegOverride=0;
@@ -1375,7 +1522,7 @@ class Corei486 {
         }
 
         try {
-            if((op & 0xC0) === 0x00 && (op & 0x04) === 0 && op < 0x3F) { 
+            if((op & 0xC0) === 0x00 && (op & 0x04) === 0 && op < 0x3F) {
                 const aluOp = (op >> 3) & 7; const dir = (op & 2) !== 0; const is8 = (op & 1) === 0;
                 const d = this.modrm(o32, a32); let seg = currentSegOverride !== -1 ? currentSegOverride : d.seg;
                 let valRM = d.isMem ? (is8?this.rm8(seg,d.addr):(o32?this.rm32(seg,d.addr):this.rm16(seg,d.addr))) : (is8?this.reg8(d.addr):(o32?this.reg32(d.addr):this.reg16(d.addr)));
@@ -1396,7 +1543,7 @@ class Corei486 {
                 mnem = ["ADD","OR","ADC","SBB","AND","SUB","XOR","CMP"][aluOp] + (is8?" AL,imm8":(o32?" EAX,imm32":" AX,imm16")); this.cycles++;
             }
             else if((op & 0xC0) === 0x00 && (op & 0x06) === 0x06 && op < 0x20 && op !== 0x0F) {
-                let seg = op >> 3; 
+                let seg = op >> 3;
                 let isPop = (op & 1) === 1;
                 if(isPop) {
                     if(seg === 1) this.raiseException(6);
@@ -1412,15 +1559,15 @@ class Corei486 {
             else if(op === 0x2F) { let al = this.reg8(0); let oldAL = al; let oldCF = this.CF; if((al & 0x0F) > 9 || this.AF) { al -= 6; this.AF = true; } else { this.AF = false; } if(oldAL > 0x99 || oldCF) { al -= 0x60; this.CF = true; } else { this.CF = false; } this.set8(0, al); this.updSZP(al, 8); mnem="DAS"; }
             else if(op === 0x37) { let al = this.reg8(0); if((al & 0x0F) > 9 || this.AF) { this.set8(0, al + 6); this.set8(4, this.reg8(4) + 1); this.AF = true; this.CF = true; } else { this.AF = false; this.CF = false; } this.set8(0, this.reg8(0) & 0x0F); mnem="AAA"; }
             else if(op === 0x3F) { let al = this.reg8(0); if((al & 0x0F) > 9 || this.AF) { this.set8(0, al - 6); this.set8(4, this.reg8(4) - 1); this.AF = true; this.CF = true; } else { this.AF = false; this.CF = false; } this.set8(0, this.reg8(0) & 0x0F); mnem="AAS"; }
-            
-            else if(op >= 0x40 && op <= 0x47) { let r=op-0x40; let v=U32((o32?this.reg32(r):this.reg16(r))+1); o32?this.set32(r,v):this.set16(r,v); this.updSZP(v,o32?32:16); this.AF=((v&0x0F)===0); this.OF=o32?(v===0x80000000):(v===0x8000); mnem="INC r"; } 
-            else if(op >= 0x48 && op <= 0x4F) { let r=op-0x48; let v=U32((o32?this.reg32(r):this.reg16(r))-1); o32?this.set32(r,v):this.set16(r,v); this.updSZP(v,o32?32:16); this.AF=((v&0x0F)===0x0F); this.OF=o32?(v===0x7FFFFFFF):(v===0x7FFF); mnem="DEC r"; } 
+
+            else if(op >= 0x40 && op <= 0x47) { let r=op-0x40; let v=U32((o32?this.reg32(r):this.reg16(r))+1); o32?this.set32(r,v):this.set16(r,v); this.updSZP(v,o32?32:16); this.AF=((v&0x0F)===0); this.OF=o32?(v===0x80000000):(v===0x8000); mnem="INC r"; }
+            else if(op >= 0x48 && op <= 0x4F) { let r=op-0x48; let v=U32((o32?this.reg32(r):this.reg16(r))-1); o32?this.set32(r,v):this.set16(r,v); this.updSZP(v,o32?32:16); this.AF=((v&0x0F)===0x0F); this.OF=o32?(v===0x7FFFFFFF):(v===0x7FFF); mnem="DEC r"; }
             else if(op >= 0x50 && op <= 0x57) { o32?this.push32(this.reg32(op-0x50)):this.push16(this.reg16(op-0x50)); mnem = "PUSH r"; }
             else if(op >= 0x58 && op <= 0x5F) { o32?this.set32(op-0x58, this.pop32()):this.set16(op-0x58, this.pop16()); mnem = "POP r"; }
             else if(op === 0x60) { if(o32) { let tmp=this.reg32(4); for(let i=0;i<8;i++) this.push32(i===4?tmp:this.reg32(i)); mnem="PUSHAD"; } else { let tmp=this.reg16(4); for(let i=0;i<8;i++) this.push16(i===4?tmp:this.reg16(i)); mnem="PUSHA"; } }
             else if(op === 0x61) { if(o32) { for(let i=7;i>=0;i--) { let v=this.pop32(); if(i!==4) this.set32(i, v); } mnem="POPAD"; } else { for(let i=7;i>=0;i--) { let v=this.pop16(); if(i!==4) this.set16(i, v); } mnem="POPA"; } }
             else if(op === 0x68) { o32?this.push32(this.f32()):this.push16(this.f16()); mnem="PUSH imm"; }
-            else if(op === 0x69 || op === 0x6B) { 
+            else if(op === 0x69 || op === 0x6B) {
                 const d = this.modrm(o32, a32); let seg=currentSegOverride!==-1?currentSegOverride:d.seg;
                 let v1 = d.isMem ? (o32?this.rm32(seg,d.addr):this.rm16(seg,d.addr)) : (o32?this.reg32(d.addr):this.reg16(d.addr));
                 let imm = op===0x6B ? I8(this.f8()) : (o32?I32(this.f32()):I16(this.f16()));
@@ -1430,16 +1577,16 @@ class Corei486 {
             else if(op === 0x6A) { o32?this.push32(I8(this.f8())):this.push16(I8(this.f8())); mnem="PUSH imm8"; }
             else if(op >= 0x6C && op <= 0x6F) {
                 let is8 = (op===0x6C || op===0x6E); let isOut = (op===0x6E || op===0x6F);
-                let sz = is8 ? 1 : (o32?4:2); let cx = a32 ? this.reg32(1) : this.reg16(1); let port = this.reg16(2); 
+                let sz = is8 ? 1 : (o32?4:2); let cx = a32 ? this.reg32(1) : this.reg16(1); let port = this.reg16(2);
                 if(!rep && !repnz) cx = 1;
                 if(cx > 0) {
                     let di = a32 ? this.reg32(7) : this.reg16(7); let si = a32 ? this.reg32(6) : this.reg16(6);
                     let inc = this.DF ? -sz : sz; let seg = currentSegOverride!==-1?currentSegOverride:3;
-                    if(!isOut) { 
+                    if(!isOut) {
                         let val = is8 ? this.bus.io.in8(port) : (o32?this.bus.io.in32(port):this.bus.io.in16(port));
                         is8 ? this.wm8(0, di, val) : (o32?this.wm32(0, di, val):this.wm16(0, di, val));
                         di = U32(di+inc);
-                    } else { 
+                    } else {
                         let val = is8 ? this.rm8(seg, si) : (o32?this.rm32(seg, si):this.rm16(seg, si));
                         is8 ? this.bus.io.out8(port, val) : (o32?this.bus.io.out32(port, val):this.bus.io.out16(port, val));
                         si = U32(si+inc);
@@ -1448,7 +1595,7 @@ class Corei486 {
                     if(a32) { this.set32(7, di); this.set32(6, si); this.set32(1, cx); } else { this.set16(7, di); this.set16(6, si); this.set16(1, cx); }
                     if(rep && cx > 0) {
                         if (this.bus.pic.hasInterrupt()) { this.eip = startEip; return; }
-                        this.eip = startEip; 
+                        this.eip = startEip;
                     }
                 }
                 mnem = (rep?"REP ":"") + (isOut?"OUTS":"INS");
@@ -1466,7 +1613,7 @@ class Corei486 {
                 const d = this.modrm(o32, a32); let is8 = op===0x84; let seg = currentSegOverride!==-1 ? currentSegOverride : d.seg;
                 let v1 = d.isMem ? (is8?this.rm8(seg,d.addr):(o32?this.rm32(seg,d.addr):this.rm16(seg,d.addr))) : (is8?this.reg8(d.addr):(o32?this.reg32(d.addr):this.reg16(d.addr)));
                 let v2 = is8?this.reg8(d.reg):(o32?this.reg32(d.reg):this.reg16(d.reg));
-                this.alu(4, v1, v2, is8?8:(o32?32:16)); mnem="TEST rm, r"; 
+                this.alu(4, v1, v2, is8?8:(o32?32:16)); mnem="TEST rm, r";
             }
             else if(op === 0x86 || op === 0x87) {
                 const d = this.modrm(o32, a32); let is8 = op===0x86; let seg = currentSegOverride!==-1 ? currentSegOverride : d.seg;
@@ -1476,7 +1623,7 @@ class Corei486 {
                 is8?this.set8(d.reg,v1):(o32?this.set32(d.reg,v1):this.set16(d.reg,v1));
                 mnem="XCHG";
             }
-            else if(op >= 0x88 && op <= 0x8B) { 
+            else if(op >= 0x88 && op <= 0x8B) {
                 const d = this.modrm(o32, a32); let seg=currentSegOverride!==-1?currentSegOverride:d.seg; let is8 = (op===0x88 || op===0x8A); let isToRM = (op===0x88 || op===0x89);
                 let v = isToRM ? (is8?this.reg8(d.reg):(o32?this.reg32(d.reg):this.reg16(d.reg))) : (d.isMem ? (is8?this.rm8(seg, d.addr):(o32?this.rm32(seg,d.addr):this.rm16(seg,d.addr))) : (is8?this.reg8(d.addr):(o32?this.reg32(d.addr):this.reg16(d.addr))));
                 if(isToRM) { if(d.isMem) { is8?this.wm8(seg, d.addr, v):(o32?this.wm32(seg,d.addr,v):this.wm16(seg,d.addr,v)); } else { is8?this.set8(d.addr, v):(o32?this.set32(d.addr,v):this.set16(d.addr,v)); } }
@@ -1499,7 +1646,7 @@ class Corei486 {
             else if(op >= 0x91 && op <= 0x97) { let r=op-0x90; let v1=o32?this.reg32(0):this.reg16(0); let v2=o32?this.reg32(r):this.reg16(r); o32?this.set32(0,v2):this.set16(0,v2); o32?this.set32(r,v1):this.set16(r,v1); mnem="XCHG EAX,r"; }
             else if(op === 0x98) { o32 ? this.set32(0, I16(this.reg16(0))) : this.set16(0, I8(this.reg8(0))); mnem=o32?"CWDE":"CBW"; }
             else if(op === 0x99) { o32 ? this.set32(2, (this.reg32(0)&0x80000000)?0xFFFFFFFF:0) : this.set16(2, (this.reg16(0)&0x8000)?0xFFFF:0); mnem=o32?"CDQ":"CWD"; }
-            else if(op === 0x9A) { 
+            else if(op === 0x9A) {
                 let ip = o32 ? this.f32() : this.f16(); let cs = this.f16();
                 if(o32) { this.push32(this.segs[1]); this.push32(this.eip); } else { this.push16(this.segs[1]); this.push16(this.eip); }
                 this.loadSegReg(1, cs); this.eip = ip; this.pipeline.flush(); mnem="CALL FAR";
@@ -1526,26 +1673,26 @@ class Corei486 {
                 if(iterations > 0) {
                     let si = a32 ? this.reg32(6) : this.reg16(6); let di = a32 ? this.reg32(7) : this.reg16(7);
                     let inc = this.DF ? -sz : sz; let seg = currentSegOverride!==-1?currentSegOverride:3;
-                    
-                    if(strName==="MOVS") { 
+
+                    if(strName==="MOVS") {
                         let v = is8?this.rm8(seg, si):(o32?this.rm32(seg, si):this.rm16(seg, si));
                         is8?this.wm8(0, di, v):(o32?this.wm32(0, di, v):this.wm16(0, di, v));
                         si=U32(si+inc); di=U32(di+inc);
                     }
-                    else if(strName==="CMPS") { 
+                    else if(strName==="CMPS") {
                         let v1 = is8?this.rm8(seg, si):(o32?this.rm32(seg, si):this.rm16(seg, si));
                         let v2 = is8?this.rm8(0, di):(o32?this.rm32(0, di):this.rm16(0, di));
                         this.alu(7, v1, v2, is8?8:(o32?32:16)); si=U32(si+inc); di=U32(di+inc);
                     }
-                    else if(strName==="STOS") { 
+                    else if(strName==="STOS") {
                         let v = is8?this.reg8(0):(o32?this.reg32(0):this.reg16(0));
                         is8?this.wm8(0, di, v):(o32?this.wm32(0, di, v):this.wm16(0, di, v)); di=U32(di+inc);
                     }
-                    else if(strName==="LODS") { 
+                    else if(strName==="LODS") {
                         let v = is8?this.rm8(seg, si):(o32?this.rm32(seg, si):this.rm16(seg, si));
                         is8?this.set8(0, v):(o32?this.set32(0, v):this.set16(0, v)); si=U32(si+inc);
                     }
-                    else if(strName==="SCAS") { 
+                    else if(strName==="SCAS") {
                         let v1 = is8?this.reg8(0):(o32?this.reg32(0):this.reg16(0));
                         let v2 = is8?this.rm8(0, di):(o32?this.rm32(0, di):this.rm16(0, di));
                         this.alu(7, v1, v2, is8?8:(o32?32:16)); di=U32(di+inc);
@@ -1553,12 +1700,12 @@ class Corei486 {
                     if(hasRepPrefix) cx--;
                     this.cycles+=3;
                     if(a32) { this.set32(6, si); this.set32(7, di); if(hasRepPrefix) this.set32(1, cx); } else { this.set16(6, si); this.set16(7, di); if(hasRepPrefix) this.set16(1, cx); }
-                    
+
                     let breakRep = false;
                     if(hasRepPrefix) {
                         if((strName==="CMPS" || strName==="SCAS")) {
-                            if(rep && !this.ZF) breakRep = true; 
-                            if(repnz && this.ZF) breakRep = true; 
+                            if(rep && !this.ZF) breakRep = true;
+                            if(repnz && this.ZF) breakRep = true;
                         }
                         if(cx > 0 && !breakRep) {
                             if(this.bus.pic.hasInterrupt()) { this.eip = startEip; return; }
@@ -1603,7 +1750,7 @@ class Corei486 {
                 let port = (op===0xE4 || op===0xE5) ? this.f8() : this.reg16(2); let is8 = (op===0xE4 || op===0xEC);
                 let val = 0;
                 if(this.bus.floppy.ports.includes(port) && this.bus.floppy.enabled) val = this.bus.floppy.in8(port);
-                else if(this.bus.hdd.ports.includes(port) && this.bus.hdd.enabled) val = this.bus.hdd.in8(port);
+                else if(this.bus.hdd.ports.includes(port) && this.bus.hdd.enabled) val = is8 ? this.bus.hdd.in8(port) : (o32 ? this.bus.hdd.in32(port) : this.bus.hdd.in16(port));
                 else if(this.bus.kbd.ports.includes(port) && (this.bus.kbd.kbdEnabled || this.bus.kbd.mouseEnabled)) val = this.bus.kbd.in8(port);
                 else if(this.bus.pic.ports.includes(port) && this.bus.pic.enabled) val = this.bus.pic.in8(port);
                 else val = is8 ? this.bus.io?.in8(port)||0 : (o32 ? this.bus.io?.in32(port)||0 : this.bus.io?.in16(port)||0);
@@ -1649,21 +1796,21 @@ class Corei486 {
                     mnem="MUL";
                 }
                 else if(d.reg===6) {
-                    if (v === 0) { logHw("¡EXCEPCIÓN! División por cero (INT 0).", "err"); this.raiseException(0); return; } 
-                    if(o32) { 
+                    if (v === 0) { logHw("¡EXCEPCIÓN! División por cero (INT 0).", "err"); this.raiseException(0); return; }
+                    if(o32) {
                         let dividend = (BigInt(this.reg32(2)>>>0) << 32n) | BigInt(this.reg32(0)>>>0);
                         let divisor = BigInt(v>>>0);
                         let q = dividend / divisor; let r = dividend % divisor;
                         if (q > 0xFFFFFFFFn) { logHw("¡EXCEPCIÓN! Overflow en DIV (INT 0).", "err"); this.raiseException(0); return; }
                         this.set32(0, Number(q)); this.set32(2, Number(r));
                     }
-                    else if(!is8) { 
+                    else if(!is8) {
                         let num = (this.reg16(2)<<16) | this.reg16(0);
-                        let rem = num%v; this.set16(0, (num/v)|0); this.set16(2, rem); 
+                        let rem = num%v; this.set16(0, (num/v)|0); this.set16(2, rem);
                     }
-                    else { 
+                    else {
                         let num = this.reg16(0);
-                        let rem = num%v; this.set8(0, (num/v)|0); this.set8(4, rem); 
+                        let rem = num%v; this.set8(0, (num/v)|0); this.set8(4, rem);
                     }
                     this.CF=false; this.OF=false; // Simplified flags
                     mnem="DIV";
@@ -1689,19 +1836,19 @@ class Corei486 {
                     if(d.reg===2) { let lim = this.rm16(seg, d.addr); let base = o32?this.rm32(seg, d.addr+2):this.rm32(seg, d.addr+2); this.gdtr = {limit: lim, base: base}; mnem="LGDT"; }
                     else if(d.reg===3) { let lim = this.rm16(seg, d.addr); let base = o32?this.rm32(seg, d.addr+2):this.rm32(seg, d.addr+2); this.idtr = {limit: lim, base: base}; mnem="LIDT"; }
                 }
-                else if(op === 0xA2) { 
+                else if(op === 0xA2) {
                     // Emular CPUID de Intel i486 DX4 (Family 4, Model 8, Step 0)
-                    this.set32(0, 0x0480); 
-                    this.set32(3, 0x756E6547); this.set32(2, 0x49656E69); this.set32(1, 0x6C65746E); 
-                    mnem="CPUID DX4"; 
+                    this.set32(0, 0x0480);
+                    this.set32(3, 0x756E6547); this.set32(2, 0x49656E69); this.set32(1, 0x6C65746E);
+                    mnem="CPUID DX4";
                 }
-                else if(op === 0xA4 || op === 0xA5 || op === 0xAC || op === 0xAD) { 
+                else if(op === 0xA4 || op === 0xA5 || op === 0xAC || op === 0xAD) {
                     const d=this.modrm(o32,a32); let seg=currentSegOverride!==-1?currentSegOverride:d.seg; let isImm = op===0xA4 || op===0xAC; let isLeft = op===0xA4 || op===0xA5;
                     let count = (isImm ? this.f8() : this.reg8(1)) & 0x1F; let dst = d.isMem ? (o32?this.rm32(seg,d.addr):this.rm16(seg,d.addr)) : (o32?this.reg32(d.addr):this.reg16(d.addr)); let src = o32 ? this.reg32(d.reg) : this.reg16(d.reg);
                     if(count > 0) { let res = 0; let bits = o32?32:16; if(isLeft) { res = (dst << count) | (src >>> (bits - count)); this.CF = ((dst >>> (bits - count)) & 1) !== 0; } else { res = (dst >>> count) | (src << (bits - count)); this.CF = ((dst >>> (count - 1)) & 1) !== 0; } this.updSZP(res, bits); if(d.isMem) { o32?this.wm32(seg,d.addr,res):this.wm16(seg,d.addr,res); } else { o32?this.set32(d.addr,res):this.set16(d.addr,res); } }
                     mnem = isLeft?"SHLD":"SHRD";
                 }
-                else if(op === 0xAB || op === 0xB3 || op === 0xBB) { 
+                else if(op === 0xAB || op === 0xB3 || op === 0xBB) {
                     const d=this.modrm(o32,a32); let seg=currentSegOverride!==-1?currentSegOverride:d.seg; let dst = d.isMem ? (o32?this.rm32(seg,d.addr):this.rm16(seg,d.addr)) : (o32?this.reg32(d.addr):this.reg16(d.addr)); let bit = (o32?this.reg32(d.reg):this.reg16(d.reg)) & (o32?31:15);
                     this.CF = ((dst >> bit) & 1) !== 0; if(op === 0xAB) dst |= (1<<bit); if(op === 0xB3) dst &= ~(1<<bit); if(op === 0xBB) dst ^= (1<<bit); if(d.isMem) { o32?this.wm32(seg,d.addr,dst):this.wm16(seg,d.addr,dst); } else { o32?this.set32(d.addr,dst):this.set16(d.addr,dst); }
                     mnem = op===0xAB?"BTS":(op===0xB3?"BTR":"BTC");
@@ -1716,13 +1863,13 @@ class Corei486 {
                 const d = this.modrm(true, a32);
                 if(op===0xD9 && d.mod===3) {
                     if(d.rm===0 && d.reg===5) { this.fPush(1.0); mnem="FLD1"; } else if(d.rm===6 && d.reg===5) { this.fPush(0.0); mnem="FLDZ"; } else if(d.rm===0 && d.reg===6) { this.fPush(Math.PI); mnem="FLDPI"; } else if(d.rm===6 && d.reg===7) { this.fSetSt(0, Math.sin(this.fSt(0))); mnem="FSIN"; } else if(d.rm===7 && d.reg===7) { this.fSetSt(0, Math.cos(this.fSt(0))); mnem="FCOS"; } else if(d.rm===0 && d.reg===7) { this.fSetSt(0, Math.sqrt(this.fSt(0))); mnem="FSQRT"; }
-                } 
+                }
                 else if(op===0xDB && d.mod===3 && d.reg===4 && d.rm===2) { this.fpu_cw = 0x037F; mnem="FCLEX"; }
                 else if(op===0xDD && d.isMem && d.reg===7) { let seg=currentSegOverride!==-1?currentSegOverride:d.seg; this.wm16(seg, d.addr, this.fpu_sw); mnem="FSTSW m16"; }
                 else if(op===0xDF && d.mod===3 && d.reg===4 && d.rm===0) { this.set16(0, this.fpu_sw); mnem="FSTSW AX"; }
                 else if (op===0xDE && d.mod===3) {
                     if(d.reg===0) { this.fSetSt(d.rm, this.fSt(d.rm) + this.fSt(0)); this.fPop(); mnem="FADDP"; } else if(d.reg===1) { this.fSetSt(d.rm, this.fSt(d.rm) * this.fSt(0)); this.fPop(); mnem="FMULP"; } else if(d.reg===4) { this.fSetSt(d.rm, this.fSt(d.rm) - this.fSt(0)); this.fPop(); mnem="FSUBP"; } else if(d.reg===6) { this.fSetSt(d.rm, this.fSt(d.rm) / this.fSt(0)); this.fPop(); mnem="FDIVP"; }
-                } 
+                }
                 else { mnem=`FPU_${hex(op,2)}`; }
             }
             else { logHw(`Opcode No Válido: ${hex(op,2)} en EIP: ${hex(startEip)}`, "err"); this.raiseException(6); }
@@ -1740,17 +1887,17 @@ class Corei486 {
 
     int(vec, isHardware = false) {
         if(isHardware) logHw(`[HARDWARE IRQ] Recibido vector 0x${hex(vec,2)}`, "warn");
-        
+
         if(this.bus.bios.enabled && !isHardware) {
             // INT 11h: Equipment Check
             if(vec === 0x11) { this.set16(0, 0x0041); return; }
             // INT 12h: Memory Size
-            if(vec === 0x12) { this.set16(0, 0x0280); return; }
+            if(vec === 0x12) { this.set16(0, Math.min(0xFC00, Math.floor(this.bus.memSize / 1024))); return; }
             // INT 14h, 17h: Dummys
             if(vec === 0x14) { this.set8(4, 0x80); return; }
             if(vec === 0x17) { this.set8(4, 0x00); return; }
             // INT 15h
-            if(vec === 0x15) { let s = this.reg8(4); if(s === 0x88) { this.set16(0, 0x3C00); this.CF=false; return; } if(s === 0xC0) { this.set16(0, 0); this.CF=true; return; } }
+            if(vec === 0x15) { let s = this.reg8(4); if(s === 0x88) { this.set16(0, Math.max(0, Math.floor(this.bus.memSize / 1024) - 1024)); this.CF=false; return; } if(s === 0xC0) { this.set16(0, 0); this.CF=true; return; } }
             // INT 1Ah: RTC
             if(vec === 0x1A) {
                 let s = this.reg8(4);
@@ -1759,7 +1906,7 @@ class Corei486 {
                 if(s === 0x02) { this.set8(5, toBCD(d.getHours())); this.set8(1, toBCD(d.getMinutes())); this.set8(6, toBCD(d.getSeconds())); this.set8(2, 0); this.CF=false; return; }
                 if(s === 0x04) { this.set8(5, toBCD(Math.floor(d.getFullYear()/100))); this.set8(1, toBCD(d.getFullYear()%100)); this.set8(6, toBCD(d.getMonth()+1)); this.set8(2, toBCD(d.getDate())); this.CF=false; return; }
             }
-            
+
             // INT 33h: MOUSE SERVICES (BLOQUEO DE HARDWARE INCORPORADO)
             if(vec === 0x33) {
                 let service = this.reg16(0); // AX
@@ -1791,40 +1938,74 @@ class Corei486 {
             }
 
             // INT 10h: Video Services Avanzado
-            if(vec === 0x10) { 
-                let service = this.reg8(4); 
-                if(service === 0x00) { 
+            if(vec === 0x10) {
+                let service = this.reg8(4);
+                if(service === 0x00) {
                     let mode = this.reg8(0);
                     this.bus.setVGAMode(mode === 0x13 ? 0x13 : 0x03);
                     return;
                 }
-                if(service === 0x0E) { 
+                if(service === 0x0E) {
                     let charCode = this.reg8(0); let cursorLoc = this.bus.vgaCursorLocation;
-                    if (charCode === 0x0D) { cursorLoc = cursorLoc - (cursorLoc % 80); } 
-                    else if (charCode === 0x0A) { cursorLoc += 80; } 
-                    else if (charCode === 0x08) { if(cursorLoc > 0) cursorLoc--; this.bus.write8(0xB8000 + cursorLoc*2, 0); this.bus.write8(0xB8000 + cursorLoc*2+1, 0x07); } 
+                    if (charCode === 0x0D) { cursorLoc = cursorLoc - (cursorLoc % 80); }
+                    else if (charCode === 0x0A) { cursorLoc += 80; }
+                    else if (charCode === 0x08) { if(cursorLoc > 0) cursorLoc--; this.bus.write8(0xB8000 + cursorLoc*2, 0); this.bus.write8(0xB8000 + cursorLoc*2+1, 0x07); }
                     else { this.bus.write8(0xB8000 + cursorLoc*2, charCode); this.bus.write8(0xB8000 + cursorLoc*2+1, 0x07); cursorLoc++; }
 
                     if (cursorLoc >= 2000) {
                         for (let i = 0; i < 1920 * 2; i++) { this.bus.write8(0xB8000 + i, this.bus.read8(0xB8000 + i + 160)); }
                         for (let i = 1920 * 2; i < 2000 * 2; i += 2) { this.bus.write8(0xB8000 + i, 0); this.bus.write8(0xB8000 + i + 1, 0x07); }
-                        cursorLoc = 1920; 
+                        cursorLoc = 1920;
                     }
                     this.bus.vgaCursorLocation = cursorLoc; this.bus.vgaDirty = true;
                 }
-                else if(service === 0x0C) { 
-                    let color = this.reg8(0); let x = this.reg16(1); let y = this.reg16(2); 
+                else if(service === 0x0C) {
+                    let color = this.reg8(0); let x = this.reg16(1); let y = this.reg16(2);
                     if(this.bus.vgaMode === 0x13 && x < 320 && y < 200) { this.bus.write8(0xA0000 + (y * 320) + x, color); }
                 }
                 else if(service === 0x02) { this.bus.vgaCursorLocation = (this.reg8(6) * 80) + this.reg8(2); this.bus.vgaDirty = true; }
                 else if(service === 0x03) { let loc = this.bus.vgaCursorLocation; this.set8(6, Math.floor(loc / 80)); this.set8(2, loc % 80); this.set16(1, 0x0607); }
+                else if(service === 0x06 || service === 0x07) {
+                    // Scroll up/down window; enough for BIOS text installers and DOS UIs.
+                    const lines = this.reg8(0) || 25; const attr = this.reg8(3) || 0x07;
+                    for(let row=0; row<25; row++) for(let col=0; col<80; col++) {
+                        const dst = 0xB8000 + ((row*80+col)*2);
+                        const srcRow = service === 0x06 ? row + lines : row - lines;
+                        if(srcRow >= 0 && srcRow < 25) { const src = 0xB8000 + ((srcRow*80+col)*2); this.bus.write16(dst, this.bus.read16(src)); }
+                        else { this.bus.write8(dst, 0x20); this.bus.write8(dst+1, attr); }
+                    }
+                    this.bus.vgaDirty = true;
+                }
                 else if(service === 0x0F) { this.set8(0, this.bus.vgaMode); this.set8(4, this.bus.vgaMode === 0x13 ? 40 : 80); this.set8(7, 0); }
                 return;
             }
 
-            // INT 13h: Disk Services LBA/CHS Exacto
-            if(vec === 0x13 && this.bus.floppy.enabled) {
-                let service = this.reg8(4); 
+            // INT 13h: Disk Services BIOS (Floppy + HDD, CHS y Extensions parciales)
+            if(vec === 0x13) {
+                let service = this.reg8(4); let driveNo = this.reg8(2);
+                const isHDD = driveNo >= 0x80;
+                if(service === 0x41 && isHDD) { this.set16(3, 0xAA55); this.set16(0, 0x3000); this.set16(1, 0x0007); this.CF = false; return; }
+                if(service === 0x42 && isHDD) {
+                    const dap = (this.segs[3] << 4) + this.reg16(6);
+                    const count = this.bus.read16(dap + 2);
+                    const dstOff = this.bus.read16(dap + 4); const dstSeg = this.bus.read16(dap + 6);
+                    const lba = this.bus.read32(dap + 8);
+                    const drive = this.bus.hdd.drives[this.bus.hdd.activeDrive];
+                    if(!drive) { this.set8(4, 0x01); this.CF = true; return; }
+                    for(let i=0; i<count*512; i++) this.bus.write8(((dstSeg << 4) + dstOff + i) & 0xFFFFF, drive.data[lba*512 + i] || 0);
+                    this.set8(4, 0); this.CF = false; return;
+                }
+                if(isHDD && (service === 0x02 || service === 0x04 || service === 0x08)) {
+                    const drive = this.bus.hdd.drives[this.bus.hdd.activeDrive];
+                    if(service === 0x08) { this.set8(4, 0); this.set8(3, 16); this.set8(1, 63); this.set8(5, 1023 & 0xFF); this.set8(6, 15); this.CF=false; return; }
+                    if(!drive) { this.set8(4, 0x01); this.CF = true; return; }
+                    let al = this.reg8(0); let ch = this.reg8(5); let cl = this.reg8(1); let dh = this.reg8(6); let bx = this.reg16(3);
+                    let cylinder = ch | ((cl & 0xC0) << 2); let sector = cl & 0x3F; let head = dh;
+                    let lba = (cylinder * 16 + head) * 63 + (sector - 1);
+                    if(service === 0x02) for(let i=0; i<al*512; i++) this.wm8(0, bx + i, drive.data[lba*512 + i] || 0);
+                    this.set8(4, 0); this.set8(0, al); this.CF = false; return;
+                }
+                if(!this.bus.floppy.enabled && !isHDD) { this.set8(4, 0x01); this.CF = true; return; }
                 if(service === 0x00 || service === 0x01) { this.set8(4, 0); this.CF = false; return; }
                 if(service === 0x02 || service === 0x04) {
                     if(!this.bus.floppy.hasDisk) { this.set8(4, 0x01); this.CF = true; return; }
@@ -1832,11 +2013,11 @@ class Corei486 {
                     let cylinder = ch | ((cl & 0xC0) << 2); let sector = cl & 0x3F; let head = dh;
                     let lba = (cylinder * 2 + head) * 18 + (sector - 1);
                     let offset = lba * 512; let bytesToRead = al * 512;
-                    
+
                     if(service === 0x02) {
                         for(let i=0; i<bytesToRead; i++) {
                             let val = (offset + i < this.bus.floppy.diskData.length) ? this.bus.floppy.diskData[offset + i] : 0;
-                            this.wm8(0, bx + i, val); 
+                            this.wm8(0, bx + i, val);
                         }
                     }
                     this.set8(4, 0); this.set8(0, al); this.CF = false; return;
@@ -1849,11 +2030,11 @@ class Corei486 {
             if(vec === 0x16 && this.bus.kbd.kbdEnabled) {
                 let service = this.reg8(4);
                 let asciiMap = {0x1E:97, 0x30:98, 0x2E:99, 0x20:100, 0x12:101, 0x21:102, 0x22:103, 0x23:104, 0x17:105, 0x24:106, 0x25:107, 0x26:108, 0x32:109, 0x31:110, 0x18:111, 0x19:112, 0x10:113, 0x13:114, 0x1F:115, 0x14:116, 0x16:117, 0x2F:118, 0x11:119, 0x2D:120, 0x15:121, 0x2C:122, 0x02:49, 0x03:50, 0x04:51, 0x05:52, 0x06:53, 0x07:54, 0x08:55, 0x09:56, 0x0A:57, 0x0B:48, 0x1C:13, 0x39:32, 0x0E:8};
-                
+
                 if(service === 0x00) {
                     if(this.bus.kbd.buffer.length > 0) {
                         let sc = this.bus.kbd.in8(0x60);
-                        if((sc & 0x80) === 0) { this.set8(4, sc); this.set8(0, asciiMap[sc] || 0); } 
+                        if((sc & 0x80) === 0) { this.set8(4, sc); this.set8(0, asciiMap[sc] || 0); }
                         else { this.eip -= 2; this.cycles--; }
                     } else { this.eip -= 2; this.cycles--; }
                     return;
@@ -1903,7 +2084,7 @@ class Assembler {
         let segPrefix = null;
         if(opStr.includes(':')) {
             let p = opStr.split(':');
-            if (this.regsSeg[p[0]] !== undefined) { segPrefix = this.regsSeg[p[0]]; opStr = p[1]; } 
+            if (this.regsSeg[p[0]] !== undefined) { segPrefix = this.regsSeg[p[0]]; opStr = p[1]; }
             else { return { type: 'far_ptr', seg: parseInt(p[0], 16), off: p[1] }; }
         }
 
@@ -1916,16 +2097,16 @@ class Assembler {
         if(this.regs8[opStr] !== undefined) return { type: 'r8', val: this.regs8[opStr], ptr: ptrType, segPfx: segPrefix };
         if(this.regsSeg[opStr] !== undefined) return { type: 'seg', val: this.regsSeg[opStr] };
         if(this.regsCR[opStr] !== undefined) return { type: 'cr', val: this.regsCR[opStr], ptr: ptrType, segPfx: segPrefix };
-        
+
         let numMatch = opStr.match(/^(?:0X([0-9A-F]+)|(-?\d+)(H)?)$/i);
         if(numMatch) { let val = parseInt(numMatch[1]||numMatch[2], (numMatch[1]||numMatch[3]==='H')?16:10); return { type: 'imm', val: val, ptr: ptrType }; }
-        
+
         let memMatch = opStr.match(/^\[(.*)\]$/);
         if(memMatch) {
             let inner = memMatch[1].replace(/\s+/g,'');
             if(this.regs32[inner] !== undefined) return { type: 'm32', val: this.regs32[inner], ptr: ptrType, segPfx: segPrefix };
             if(this.regs16[inner] !== undefined) return { type: 'm16', val: this.regs16[inner], ptr: ptrType, segPfx: segPrefix };
-            
+
             let m16Regex = /^([A-Z]{2})\+([A-Z]{2})(?:([\+\-])(0X[0-9A-F]+|\d+))?$/i;
             let m16Match = inner.match(m16Regex);
             if (m16Match) {
@@ -1939,12 +2120,12 @@ class Assembler {
             if(sibMatch) {
                 let base32 = this.regs32[sibMatch[1]]; let base16 = this.regs16[sibMatch[1]]; let sign = sibMatch[4] === '-' ? -1 : 1; let disp = sibMatch[5] ? sign * parseInt(sibMatch[5], sibMatch[5].startsWith('0X')?16:10) : 0;
                 if(base32 !== undefined && !sibMatch[2]) return { type: 'm32_disp', base: base32, disp: disp, ptr: ptrType, segPfx: segPrefix };
-                if(base16 !== undefined && !sibMatch[2]) return { type: 'm16_disp', base: base16, disp: disp, ptr: ptrType, segPfx: segPrefix }; 
+                if(base16 !== undefined && !sibMatch[2]) return { type: 'm16_disp', base: base16, disp: disp, ptr: ptrType, segPfx: segPrefix };
             }
 
             let immMatch = inner.match(/^(?:0X([0-9A-F]+)|(\d+))$/i);
             if(immMatch) return { type: 'm32_imm', val: parseInt(immMatch[1]||immMatch[2], immMatch[1]?16:10), ptr: ptrType, segPfx: segPrefix };
-            return { type: 'lbl_mem', val: inner, ptr: ptrType, segPfx: segPrefix }; 
+            return { type: 'lbl_mem', val: inner, ptr: ptrType, segPfx: segPrefix };
         }
         return { type: 'lbl', val: opStr, ptr: ptrType };
     }
@@ -1956,12 +2137,12 @@ class Assembler {
         }
         if(['DW'].includes(mnem)) return 2; if(['DD'].includes(mnem)) return 4;
         if(['FLD1','FLDZ','FLDPI','FSIN','FCOS','FSQRT','FADDP','FMULP','FSUBP','FDIVP','FCLEX'].includes(mnem)) return 2;
-        
+
         let prefixSize = 0; let has32Reg = ops.some(o => o && (o.type === 'r32' || o.ptr === 'DWORD')); let has16Reg = ops.some(o => o && (o.type === 'r16' || o.ptr === 'WORD')); let hasSegOverride = ops.some(o => o && o.segPfx !== undefined && o.segPfx !== null);
         if(!is32Mode && has32Reg) prefixSize++; if(is32Mode && has16Reg) prefixSize++; if(hasSegOverride) prefixSize++;
 
-        if(['LGDT', 'LIDT'].includes(mnem)) return 3 + prefixSize + (is32Mode?4:2); 
-        
+        if(['LGDT', 'LIDT'].includes(mnem)) return 3 + prefixSize + (is32Mode?4:2);
+
         let isR8 = (o) => o && o.type === 'r8'; let isR16 = (o) => o && o.type === 'r16'; let isR32 = (o) => o && o.type === 'r32'; let isReg = (o) => isR8(o) || isR16(o) || isR32(o); let isSeg = (o) => o && o.type === 'seg'; let isImm = (o) => o && (o.type === 'imm' || o.type === 'lbl'); let isMemImm = (o) => o && (o.type === 'm32_imm' || o.type === 'lbl_mem'); let isMemDisp = (o) => o && (o.type === 'm32_disp' || o.type === 'm16_disp' || o.type === 'm16_complex');
 
         if(['MOV', 'ADD', 'SUB', 'CMP', 'AND', 'OR', 'XOR', 'TEST', 'XCHG', 'IMUL'].includes(mnem)) {
@@ -1982,28 +2163,28 @@ class Assembler {
         if(['PUSH', 'POP', 'INC', 'DEC'].includes(mnem)) {
             if(ops[0] && (ops[0].type==='r32'||ops[0].type==='r16')) return prefixSize + 1;
             if(ops[0] && ops[0].type==='r8') return prefixSize + 2;
-            if(ops[0] && ops[0].type==='imm') return prefixSize + (has32Reg ? 5 : 3); 
+            if(ops[0] && ops[0].type==='imm') return prefixSize + (has32Reg ? 5 : 3);
             return prefixSize + 2;
         }
         if(['MUL', 'DIV', 'NOT', 'NEG'].includes(mnem)) return prefixSize + 2;
         if(['CALL', 'JMP'].includes(mnem)) {
-            if(ops[0] && ops[0].type === 'far_ptr') return prefixSize + (is32Mode ? 7 : 5); 
-            return prefixSize + (is32Mode ? 5 : 3); 
+            if(ops[0] && ops[0].type === 'far_ptr') return prefixSize + (is32Mode ? 7 : 5);
+            return prefixSize + (is32Mode ? 5 : 3);
         }
-        if(mnem.startsWith('J') && mnem !== 'JMP') return 2; 
+        if(mnem.startsWith('J') && mnem !== 'JMP') return 2;
         if(['LOOPE', 'LOOPNE', 'LOOPZ', 'LOOPNZ', 'LOOP', 'JCXZ', 'JECXZ'].includes(mnem)) return 2;
         if(['IN', 'OUT'].includes(mnem)) return prefixSize + (ops[mnem === 'IN' ? 1 : 0] && ops[mnem === 'IN' ? 1 : 0].type === 'imm' ? 2 : 1);
         if(['INT'].includes(mnem)) return 2;
         if(['REP', 'REPE', 'REPZ', 'REPNE', 'REPNZ'].includes(mnem)) return 2;
         if(['RETF'].includes(mnem)) return ops[0] ? 3 : 1;
-        
-        return prefixSize + 2; 
+
+        return prefixSize + 2;
     }
 
     build() {
         document.getElementById('buildLogs').innerText = ""; this.log("=== INICIANDO COMPILADOR INTEL i486 DX4 ULTIMATE ===");
         const source = document.getElementById('asmInput').value.split('\n');
-        let labels = {}; let codeTokens = []; let pc = 0x7C00; let currentModeIs32 = false; 
+        let labels = {}; let codeTokens = []; let pc = 0x7C00; let currentModeIs32 = false;
         const resolveDataValue = (token) => {
             const raw = (token || '').trim();
             if (!raw) return 0;
@@ -2013,21 +2194,21 @@ class Assembler {
             if (/^-?\d+$/.test(raw)) return parseInt(raw, 10);
             return 0;
         };
-        
+
         for(let i=0; i<source.length; i++) {
             let line = source[i].split(';')[0].trim(); if(!line) continue;
             if(line.toUpperCase() === '[BITS 16]') { currentModeIs32 = false; this.log("Directiva: MODO 16-BIT"); continue; }
             if(line.toUpperCase() === '[BITS 32]') { currentModeIs32 = true; this.log("Directiva: MODO 32-BIT"); continue; }
             if(line.toUpperCase().startsWith('ORG ')) { pc = parseInt(line.substring(4).trim(), 16) || pc; continue; }
-            
+
             let labelMatch = line.match(/^([A-Z0-9_]+):(.*)/i);
             if(labelMatch) { labels[labelMatch[1].toUpperCase()] = pc; line = labelMatch[2].trim(); if(!line) continue; }
-            
+
             if(line.toUpperCase().startsWith('DB ')) {
                 let strMatch = line.match(/DB\s+"([^"]+)"\s*(?:,\s*(\d+|0X[0-9A-F]+))?/i);
                 if(strMatch) {
-                    let str = strMatch[1]; for(let c=0; c<str.length; c++) codeTokens.push({ pc: pc++, mnem: 'DB', val: str.charCodeAt(c), sz: 1, raw: `DB '${str[c]}'`, is32M: currentModeIs32 }); 
-                    if(strMatch[2] !== undefined) codeTokens.push({ pc: pc++, mnem: 'DB', val: parseInt(strMatch[2], strMatch[2].startsWith('0X')?16:10), sz: 1, raw: `DB ${strMatch[2]}`, is32M: currentModeIs32 }); 
+                    let str = strMatch[1]; for(let c=0; c<str.length; c++) codeTokens.push({ pc: pc++, mnem: 'DB', val: str.charCodeAt(c), sz: 1, raw: `DB '${str[c]}'`, is32M: currentModeIs32 });
+                    if(strMatch[2] !== undefined) codeTokens.push({ pc: pc++, mnem: 'DB', val: parseInt(strMatch[2], strMatch[2].startsWith('0X')?16:10), sz: 1, raw: `DB ${strMatch[2]}`, is32M: currentModeIs32 });
                     continue;
                 }
             }
@@ -2048,14 +2229,14 @@ class Assembler {
 
             let ops = []; let opsString = line.substring(mnem.length).trim();
             if (opsString) ops = opsString.split(',').map(s => this.parseOp(s));
-            
+
             let size = this.getInstructionSize(mnem, ops, currentModeIs32);
             codeTokens.push({ pc: pc, mnem: mnem, ops: ops, line: i+1, raw: line, sz: size, is32M: currentModeIs32 }); pc += size;
         }
 
         this.log(`[Pass 1] Terminado. Generando código binario (Pass 2)...`);
         let binary = []; let success = true; let startPc = codeTokens.length > 0 ? codeTokens[0].pc : 0x7C00;
-        
+
         const emit = (...bytes) => bytes.forEach(b => binary.push(b & 0xFF));
         const emit32 = (v) => emit(v, v>>8, v>>16, v>>24);
         const emit16 = (v) => emit(v, v>>8);
@@ -2076,7 +2257,7 @@ class Assembler {
                 else {
                     let has32Reg = ops && ops.some(o => o && (o.type === 'r32' || o.ptr === 'DWORD'));
                     let has16Reg = ops && ops.some(o => o && (o.type === 'r16' || o.ptr === 'WORD'));
-                    
+
                     if(ops && ops[0] && ops[0].segPfx !== undefined && ops[0].segPfx !== null) { let segCodes = [0x26, 0x2E, 0x36, 0x3E, 0x64, 0x65]; emit(segCodes[ops[0].segPfx]); }
                     if(ops && ops[1] && ops[1].segPfx !== undefined && ops[1].segPfx !== null) { let segCodes = [0x26, 0x2E, 0x36, 0x3E, 0x64, 0x65]; emit(segCodes[ops[1].segPfx]); }
 
@@ -2088,13 +2269,13 @@ class Assembler {
                         if(!tk.is32M && has32Reg) { emit(0x66); opSize32 = true; }
                         if(tk.is32M && has16Reg) { emit(0x66); opSize32 = false; }
                     }
-                    
+
                     let emitImm = (v) => opSize32 ? emit32(v) : emit16(v); let emitAddr = (v) => tk.is32M ? emit32(v) : emit16(v);
 
                     if(mnem === 'NOP') emit(0x90); else if(mnem === 'HLT') emit(0xF4); else if(mnem === 'RET') emit(0xC3); else if(mnem === 'RETF') { if(ops[0]) { emit(0xCA); emit16(ops[0].val); } else { emit(0xCB); } }
                     else if(mnem === 'CLD') emit(0xFC); else if(mnem === 'STD') emit(0xFD); else if(mnem === 'CLI') emit(0xFA); else if(mnem === 'STI') emit(0xFB); else if(mnem === 'IRET') emit(0xCF);
                     else if(mnem === 'PUSHF') emit(0x9C); else if(mnem === 'POPF') emit(0x9D); else if(mnem === 'DAA') emit(0x27); else if(mnem === 'DAS') emit(0x2F); else if(mnem === 'AAA') emit(0x37); else if(mnem === 'AAS') emit(0x3F); else if(mnem === 'CLC') emit(0xF8); else if(mnem === 'STC') emit(0xF9); else if(mnem === 'CMC') emit(0xF5); else if(mnem === 'INT3') emit(0xCC); else if(mnem === 'LAHF') emit(0x9F); else if(mnem === 'SAHF') emit(0x9E); else if(mnem === 'CBW' || mnem === 'CWDE') emit(0x98); else if(mnem === 'CWD' || mnem === 'CDQ') emit(0x99); else if(mnem === 'PUSHAD' || mnem === 'PUSHA') emit(0x60); else if(mnem === 'POPAD' || mnem === 'POPA') emit(0x61);
-                    
+
                     else if(mnem.startsWith('MOVS')) emit(mnem.endsWith('B') ? 0xA4 : 0xA5); else if(mnem.startsWith('STOS')) emit(mnem.endsWith('B') ? 0xAA : 0xAB); else if(mnem.startsWith('LODS')) emit(mnem.endsWith('B') ? 0xAC : 0xAD); else if(mnem.startsWith('CMPS')) emit(mnem.endsWith('B') ? 0xA6 : 0xA7); else if(mnem.startsWith('SCAS')) emit(mnem.endsWith('B') ? 0xAE : 0xAF);
 
                     else if(mnem === 'LGDT' && ops[0].type==='lbl_mem') { emit(0x0F); emit(0x01); emit(0x16); emitAddr(labels[ops[0].val]||0); } else if(mnem === 'LIDT' && ops[0].type==='lbl_mem') { emit(0x0F); emit(0x01); emit(0x1E); emitAddr(labels[ops[0].val]||0); }
@@ -2155,12 +2336,12 @@ class Assembler {
                         let opcMap = {'ROL':0,'ROR':1,'RCL':2,'RCR':3,'SHL':4,'SHR':5,'SAL':4,'SAR':7};
                         if(ops[0].type==='r32' || ops[0].type==='r16') { if(ops[1] && ops[1].type==='imm' && ops[1].val===1) { emit(0xD1); emit(0xC0 | (opcMap[mnem] << 3) | ops[0].val); } else if(ops[1] && ops[1].type==='imm') { emit(0xC1); emit(0xC0 | (opcMap[mnem] << 3) | ops[0].val); emit(ops[1].val); } }
                     }
-                    else if(mnem === 'JMP') { 
-                        if (ops[0].type === 'far_ptr') { emit(0xEA); let off = labels[ops[0].off] || parseInt(ops[0].off, 16) || 0; if(tk.is32M) emit32(off); else emit16(off); emit16(ops[0].seg); }
+                    else if(mnem === 'JMP') {
+                        if (ops[0].type === 'far_ptr') { let off = labels[ops[0].off] || parseInt(ops[0].off, 16) || 0; const needs32Far = tk.is32M || (!tk.is32M && off > 0xFFFF); if(needs32Far && !tk.is32M) emit(0x66); emit(0xEA); if(needs32Far) emit32(off); else emit16(off); emit16(ops[0].seg); }
                         else { let t = ops[0].type==='lbl' ? labels[ops[0].val] : ops[0].val; let offset = t - (tk.pc + (tk.is32M ? 5 : 3)); if (offset < 0) offset = (offset >>> 0) & (tk.is32M ? 0xFFFFFFFF : 0xFFFF); emit(0xE9); if(tk.is32M){emit32(offset);}else{emit16(offset);} }
                     }
-                    else if(mnem === 'CALL') { 
-                        if (ops[0].type === 'far_ptr') { emit(0x9A); let off = labels[ops[0].off] || parseInt(ops[0].off, 16) || 0; if(tk.is32M) emit32(off); else emit16(off); emit16(ops[0].seg); } 
+                    else if(mnem === 'CALL') {
+                        if (ops[0].type === 'far_ptr') { let off = labels[ops[0].off] || parseInt(ops[0].off, 16) || 0; const needs32Far = tk.is32M || (!tk.is32M && off > 0xFFFF); if(needs32Far && !tk.is32M) emit(0x66); emit(0x9A); if(needs32Far) emit32(off); else emit16(off); emit16(ops[0].seg); }
                         else { let t = ops[0].type==='lbl' ? labels[ops[0].val] : ops[0].val; let offset = t - (tk.pc + (tk.is32M ? 5 : 3)); if (offset < 0) offset = (offset >>> 0) & (tk.is32M ? 0xFFFFFFFF : 0xFFFF); emit(0xE8); if(tk.is32M){emit32(offset);}else{emit16(offset);} }
                     }
                     else if(mnem.startsWith('J') && mnem !== 'JCXZ' && mnem !== 'JECXZ') {
@@ -2171,7 +2352,7 @@ class Assembler {
                     else if(['REP', 'REPE', 'REPZ', 'REPNE', 'REPNZ'].includes(mnem)) { let pfx = (mnem === 'REPNE' || mnem === 'REPNZ') ? 0xF2 : 0xF3; let inner = ops[0] ? ops[0].val : 'MOVSB'; let mapOp = {'MOVSB':0xA4, 'MOVSW':0xA5, 'MOVSD':0xA5, 'STOSB':0xAA, 'STOSW':0xAB, 'STOSD':0xAB, 'LODSB':0xAC, 'LODSW':0xAD, 'LODSD':0xAD, 'CMPSB':0xA6, 'CMPSW':0xA7, 'CMPSD':0xA7, 'SCASB':0xAE, 'SCASW':0xAF, 'SCASD':0xAF}; emit(pfx); emit(mapOp[inner]); }
                     else { this.log(`! Operación no codificable: ${mnem}`); success = false; }
                 }
-                
+
                 let emitted = binary.length - currentBinaryLen;
                 if(emitted < tk.sz && !['DB','DW','DD'].includes(mnem)) { while(binary.length - currentBinaryLen < tk.sz) emit(0x90); }
 
@@ -2180,10 +2361,10 @@ class Assembler {
 
         if(success) {
             this.log(`¡Ensamblado Exitoso sin Bugs! Tamaño: ${binary.length} bytes. Base: 0x${hex(startPc)}`);
-            emu.reset(true); 
+            emu.reset(true);
             for(let i=0; i<binary.length; i++) sysBus.physMem[startPc + i] = binary[i];
             emu.cache.flush();
-            emu.eip = startPc; debuggerSys.syncDisasm(codeTokens.filter(t => !['DB','DW','DD'].includes(t.mnem))); ui.update(); 
+            emu.eip = startPc; debuggerSys.syncDisasm(codeTokens.filter(t => !['DB','DW','DD'].includes(t.mnem))); ui.update();
             logHw(`ROM flasheada exitosamente en 0x${hex(startPc)}. Sistema DX4 estable.`, "sys");
         }
     }
@@ -2225,20 +2406,27 @@ window.onload = function() {
     window.ui = {
         runInt: null,
         lastMouseX: 0, lastMouseY: 0,
-        
+        setRAMSize: function(value) {
+            const mb = Math.max(8, Math.min(64, parseInt(value, 10) || 16));
+            document.getElementById('ramSizeLbl').innerText = `${mb} MB`;
+            sysBus.resizeMemory(mb);
+            if(emu) { emu.cache.flush(); emu.reset(true); }
+            this.update();
+        },
+
         handleMouseMove: function(e) {
-            if(!sysBus.kbd.mouseEnabled || !sysBus.bios.mouseInitialized) return; 
-            
+            if(!sysBus.kbd.mouseEnabled || !sysBus.bios.mouseInitialized) return;
+
             let rect = document.getElementById('mainVGAContainer').getBoundingClientRect();
             let x = Math.floor((e.clientX - rect.left) / rect.width * 640);
             let y = Math.floor((e.clientY - rect.top) / rect.height * 200);
-            
+
             let dx = x - this.lastMouseX; let dy = this.lastMouseY - y;
             this.lastMouseX = x; this.lastMouseY = y;
-            
+
             sysBus.bios.mouseX = Math.max(0, Math.min(x, 639));
             sysBus.bios.mouseY = Math.max(0, Math.min(y, 199));
-            
+
             document.getElementById('mousePosLbl').innerText = `${sysBus.bios.mouseX}, ${sysBus.bios.mouseY}`;
             if(Math.abs(dx)>0 || Math.abs(dy)>0) {
                 sysBus.kbd.pushMousePacket(dx, dy, (sysBus.bios.mouseBtn&1)!==0, (sysBus.bios.mouseBtn&2)!==0, (sysBus.bios.mouseBtn&4)!==0);
@@ -2246,28 +2434,28 @@ window.onload = function() {
             }
         },
         handleMouseBtn: function(e, isDown) {
-            if(!sysBus.kbd.mouseEnabled || !sysBus.bios.mouseInitialized) return; 
-            
+            if(!sysBus.kbd.mouseEnabled || !sysBus.bios.mouseInitialized) return;
+
             if(e.button === 0) { if(isDown) sysBus.bios.mouseBtn |= 1; else sysBus.bios.mouseBtn &= ~1; }
             if(e.button === 2) { if(isDown) sysBus.bios.mouseBtn |= 2; else sysBus.bios.mouseBtn &= ~2; }
             if(e.button === 1) { if(isDown) sysBus.bios.mouseBtn |= 4; else sysBus.bios.mouseBtn &= ~4; }
             let btnStr = "Ninguno";
             if(sysBus.bios.mouseBtn&1) btnStr="Izquierdo"; else if(sysBus.bios.mouseBtn&2) btnStr="Derecho"; else if(sysBus.bios.mouseBtn&4) btnStr="Medio";
             document.getElementById('mouseBtnLbl').innerText = btnStr;
-            
+
             sysBus.kbd.pushMousePacket(0, 0, (sysBus.bios.mouseBtn&1)!==0, (sysBus.bios.mouseBtn&2)!==0, (sysBus.bios.mouseBtn&4)!==0);
             if (sysBus.bios.mouseVisible) sysBus.vgaDirty = true; // Activar visual visualmente
         },
-        
+
         updateMem: function() {
             let mAddr = parseInt(document.getElementById('memAddr').value, 16) || 0;
             let mdHtml = '';
             for(let r=0; r<8; r++) {
                 let rowA = mAddr + r*8; mdHtml += `<div class="mem-row"><span class="mem-addr">${hex(rowA)}</span><span>`;
                 let asciiStr = '';
-                for(let c=0; c<8; c++) { 
+                for(let c=0; c<8; c++) {
                     try { let b = sysBus.read8(rowA+c); mdHtml += `<span class="hex-cell ${b===0?'text-slate-700':'text-cyan-300'}">${hex(b, 2)}</span> `; asciiStr += (b >= 32 && b <= 126) ? String.fromCharCode(b) : '.';
-                    } catch { mdHtml += "<span class='hex-cell'>??</span> "; asciiStr += '.'; } 
+                    } catch { mdHtml += "<span class='hex-cell'>??</span> "; asciiStr += '.'; }
                 }
                 mdHtml += `</span><span class="ascii-cell pl-2">${asciiStr.replace(/</g, '&lt;')}</span></div>`;
             }
@@ -2283,7 +2471,7 @@ window.onload = function() {
         updateVGA: function() {
             if(!sysBus.vgaDirty || !sysBus.vgaEnabled) return;
             sysBus.vgaDirty = false;
-            
+
             if (sysBus.vgaMode === 0x03) {
                 let offset = 0xB8000;
                 let mouseLoc = -1;
@@ -2338,7 +2526,7 @@ window.onload = function() {
             if(!emu) return;
             ['EAX','ECX','EDX','EBX','ESP','EBP','ESI','EDI'].forEach((r,i) => document.getElementById('r'+r).innerText = hex(emu.reg32(i)));
             document.getElementById('rEIP').innerText = `EIP: ${hex(emu.eip)}`; document.getElementById('sysCycles').innerText = emu.cycles;
-            
+
             let pe = (emu.cr[0] & 1); let pg = (emu.cr[0] & 0x80000000); let v86 = (emu.eflags & 0x20000) !== 0;
             let modeEl = document.getElementById('sysMode');
             modeEl.innerText = pe ? "PROTECTED MODE (32-Bit)" : "REAL MODE (16-Bit)"; modeEl.className = `sys-mode ${pe?'bg-blue-900 text-blue-300 border-blue-500':'bg-yellow-900 text-yellow-400 border-yellow-700'}`;
@@ -2347,7 +2535,7 @@ window.onload = function() {
             document.getElementById('sysCPL').innerText = emu.cpl;
 
             ['CR0','CR2','CR3','CR4'].forEach(r => document.getElementById('r'+r).innerText = hex(emu.cr[r[2]||0]));
-            
+
             ['CS','DS','ES','SS','FS','GS'].forEach((s,i) => {
                 let idx = s==='CS'?1:(s==='DS'?3:(s==='ES'?0:(s==='SS'?2:(s==='FS'?4:5))));
                 document.getElementById('s'+s).innerText = hex(emu.segs[idx], 4); document.getElementById('b'+s).innerText = hex(emu.desc[idx].base);
@@ -2355,7 +2543,7 @@ window.onload = function() {
             });
 
             let fHtml=''; ['CF','PF','AF','ZF','SF','TF','IF','DF','OF'].forEach((n,i) => { fHtml+=`<span class="${(emu.eflags&(1<<[0,2,4,6,7,8,9,10,11][i]))?'flag-on':'flag-off'}">${n}</span>`; }); document.getElementById('flagsBox').innerHTML = fHtml;
-            
+
             let fpuHtml = ''; document.getElementById('fpuTop').innerText = emu.fpu_top;
             for(let i=0; i<8; i++) { let isEmpty = emu.fpu_tag[i] === 3; fpuHtml += `<span class="reg-name ${isEmpty?'text-slate-600':'text-fuchsia-400'}">ST(${i})</span><span class="reg-val ${isEmpty?'text-slate-600':'text-green-400'}">${isEmpty?'Empty':emu.fpu_st[i].toExponential(4)}</span><br>`; } document.getElementById('fpuStackBox').innerHTML = fpuHtml;
 
@@ -2409,34 +2597,34 @@ loop:
 
     emu.run = function() {
         if(ui.runInt) return;
-        document.getElementById('btnRun').disabled = true; 
-        document.getElementById('btnStep').disabled = true; 
+        document.getElementById('btnRun').disabled = true;
+        document.getElementById('btnStep').disabled = true;
         document.getElementById('btnStop').disabled = false;
-        
+
         ui.runInt = setInterval(() => {
             try {
-                for(let i=0; i<15000; i++) { 
+                for(let i=0; i<15000; i++) {
                     // 1. Control del estado HALT e interrupciones
                     if(emu.halted) {
-                        if(sysBus.pic.hasInterrupt() && (emu.eflags & 0x0200)) { 
-                            emu.halted = false; 
+                        if(sysBus.pic.hasInterrupt() && (emu.eflags & 0x0200)) {
+                            emu.halted = false;
                         } else {
-                            sysBus.pit.tick(15000 - i); 
-                            break; 
+                            sysBus.pit.tick(15000 - i);
+                            break;
                         }
                     }
-                    
+
                     // 2. Sincronización del PIC exacta para este código
                     if(sysBus.pic.hasInterrupt() && (emu.eflags & 0x0200)) {
                         const vector = sysBus.pic.getVector(); // Adaptado a tu objeto PIC
                         emu.int(vector, true); // Adaptado a la inyección de tu Corei486
                     }
 
-                    if(debuggerSys.breakpoints.has(emu.eip)) { emu.stop(); break; } 
-                    
+                    if(debuggerSys.breakpoints.has(emu.eip)) { emu.stop(); break; }
+
                     // 3. Paso de instrucción protegido
                     try {
-                        emu.step(false); 
+                        emu.step(false);
                     } catch(cpuEx) {
                         logHw(`Excepción CPU en EIP 0x${emu.eip.toString(16).toUpperCase()}: ${cpuEx.message}`, "err");
                         emu.stop();
@@ -2449,16 +2637,16 @@ loop:
                 console.error("Error en bucle principal:", e);
                 emu.stop();
             }
-        }, 16); 
+        }, 16);
     };
 
-    emu.stop = function() { 
-        clearInterval(ui.runInt); 
-        ui.runInt = null; 
-        document.getElementById('btnRun').disabled = false; 
-        document.getElementById('btnStep').disabled = false; 
-        document.getElementById('btnStop').disabled = true; 
-        ui.update(); 
+    emu.stop = function() {
+        clearInterval(ui.runInt);
+        ui.runInt = null;
+        document.getElementById('btnRun').disabled = false;
+        document.getElementById('btnStep').disabled = false;
+        document.getElementById('btnStop').disabled = true;
+        ui.update();
     };
 
     document.addEventListener('keydown', (e) => {
@@ -2471,7 +2659,7 @@ loop:
     });
 
     // MODO TEXTO PURO SELECCIONADO POR DEFECTO
-    ui.loadDemo(9); 
+    ui.loadDemo(9);
 };
 </script>
 </body>
